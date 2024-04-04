@@ -1,0 +1,77 @@
+.cc-navigation {
+  width: 250px;
+  background-color: white;
+  height: 100%;
+}
+
+.cc-navigation ul {
+  list-style-type: none;
+  padding: 10px;
+  margin: 0px;
+}
+
+.cc-navigation a {
+  text-decoration: none;
+  background-color: transparent;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  color: var(--accent-color);
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.cc-navigation .active {
+  background-color: lightgrey;
+  border-radius: 4px;
+}
+
+.cc-navigation svg {
+  width: 1.4em;
+  height: 1.4em;
+  margin-right: 15px;
+}
+
+.cc-nav-bar {
+  background-color: white;
+  color: var(--accent-color);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: absolute;
+}
+
+.cc-nav-bar svg {
+  margin: 0px;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 15px;
+  color: var(--accent-color);
+}
+.cc-nav-bar a {
+  text-decoration: none;
+}
+
+.cc-nav-bar h1 {
+  font-size: x-large;
+  font-weight: bold;
+  margin: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  color: var(--accent-color);
+}
+
+.cc-nav-bar button {
+  background-color: transparent;
+  border: none;
+  color: var(--accent-color);
+  margin: 0px;
+  padding: 0px;
+}
+.cc-nav-bar a {
+  padding: 0px;
+}
