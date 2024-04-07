@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as client from "./client";
 import { useNavigate } from "react-router";
+import { isAxiosError } from "axios";
 
 export function useQueryUser() {
   const queryResult = useQuery({
@@ -24,8 +25,8 @@ export function useUser() {
 
 export function useRefreshUser() {
   const queryClient = useQueryClient();
-  return useCallback(() => {
-    queryClient.refetchQueries();
+  return useCallback(async () => {
+    await queryClient.refetchQueries();
   }, [queryClient]);
 }
 
@@ -38,4 +39,17 @@ export function useAssertUser() {
     }
   }, [data, isPending, navigate]);
   return data;
+}
+
+export function useRefreshOnUnauthorized() {
+  const refreshUser = useRefreshUser();
+  const refreshOnUnauthenticated = useCallback(
+    async (error: unknown) => {
+      if (isAxiosError(error) && error.response?.status === 401) {
+        await refreshUser();
+      }
+    },
+    [refreshUser]
+  );
+  return refreshOnUnauthenticated;
 }

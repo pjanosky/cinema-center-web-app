@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "./index.css";
+
 import ProfileNavigation from "./Navigation";
 import { Navigate, Route, Routes, useParams } from "react-router";
 import Account from "./Account";
@@ -7,9 +7,10 @@ import Reviews from "./Reviews";
 import Followers from "./Followers/followers";
 import Following from "./Followers/following";
 import { User } from "../types";
-import * as client from "./Followers/client";
+import * as client from "./client";
 import { useRefreshUser, useUser } from "../Account/hooks";
 import Lists from "./Lists";
+import Likes from "./Likes";
 
 export default function Profile() {
   const currentUser = useUser();
@@ -17,9 +18,14 @@ export default function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState<User | undefined>();
   const fetchUser = useCallback(async () => {
-    if (id) {
+    if (!id) {
+      return;
+    }
+    try {
       const user = await client.getUser(id);
       setUser(user);
+    } catch (error) {
+      console.log(error);
     }
   }, [id]);
   useEffect(() => {
@@ -30,13 +36,13 @@ export default function Profile() {
   const follow = async () => {
     if (currentUser && id) {
       await client.addFollower(currentUser._id, id);
-      refreshUser();
+      await refreshUser();
     }
   };
   const unfollow = async () => {
     if (currentUser && id) {
       await client.removeFollower(currentUser._id, id);
-      refreshUser();
+      await refreshUser();
     }
   };
 
@@ -57,19 +63,20 @@ export default function Profile() {
           </button>
         )}
       </div>
-      Username: {user?.username || ""}
+      <h4>@{user?.username || ""}</h4>
       <ProfileNavigation user={user}>
         <Routes>
           <Route
             path=""
             element={
               <Navigate
-                to={user.role === "user" ? "lists" : "reviews"}
+                to={user.role === "user" ? "reviews" : "lists"}
                 replace={true}
               />
             }
           />
           <Route path="reviews" element={<Reviews user={user} />} />
+          <Route path="likes" element={<Likes user={user} />} />
           <Route path="followers" element={<Followers />} />
           <Route path="following" element={<Following />} />
           <Route path="account" element={<Account />} />

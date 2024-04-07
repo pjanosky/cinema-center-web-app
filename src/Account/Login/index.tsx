@@ -3,11 +3,14 @@ import { useNavigate } from "react-router";
 import * as client from "../client";
 import { useRefreshUser, useUser } from "../hooks";
 import { Alert, Button, InputGroup } from "react-bootstrap";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./index.css";
+import { useSearchParams } from "react-router-dom";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const refreshUser = useRefreshUser();
   const user = useUser();
   const [username, setUsername] = useState("");
@@ -20,12 +23,21 @@ export default function Login() {
     }
   }, [navigate, user]);
 
+  const redirect = searchParams.get("redirect");
+  const redirectParams = Array.from(searchParams.entries())
+    .filter(([key, value]) => key !== "redirect")
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
   const login = async () => {
     setError(undefined);
     try {
       await client.login(username, password);
-      refreshUser();
-      navigate("/home", { replace: true });
+      await refreshUser();
+      if (redirect) {
+        navigate(`${redirect}?${redirectParams}`, { replace: true });
+      } else {
+        navigate("/home", { replace: true });
+      }
     } catch {
       setError("Invalid username or password");
     }
@@ -64,7 +76,7 @@ export default function Login() {
                 onClick={() => setShowPassword((show) => !show)}
                 variant="secondary"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </Button>
             </InputGroup>
           </label>

@@ -2,7 +2,7 @@ import { User } from "../../types";
 import React, { useCallback, useEffect, useState } from "react";
 import UserList from "./userList";
 import { useParams } from "react-router";
-import * as client from "./client";
+import * as client from "../client";
 
 export default function Following() {
   const { id } = useParams();
@@ -19,7 +19,7 @@ export default function Following() {
 
   return (
     <div>
-      <h1>Following</h1>
+      <h2>Following</h2>
       <UserList users={users} />
     </div>
   );

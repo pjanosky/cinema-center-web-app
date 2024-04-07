@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {
-  HashRouter,
+  BrowserRouter,
   Navigate,
   Route,
   Routes,
@@ -17,7 +17,7 @@ import { useQueryUser } from "./Account/hooks";
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Navigation>
         <Routes>
           <Route path="" element={<Navigate to="/home" replace={true} />} />
@@ -30,7 +30,7 @@ function App() {
           <Route path="details/:id/*" element={<Details />} />
         </Routes>
       </Navigation>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

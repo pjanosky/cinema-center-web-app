@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../../types";
+import { Review, User } from "../types";
 
 export async function getUser(userId: string): Promise<User> {
   const response = await axios.get(`/user/${userId}`);
@@ -25,4 +25,14 @@ export async function removeFollower(
   followingId: string
 ) {
   await axios.delete(`/user/${currentUserId}/following/${followingId}`);
+}
+
+export async function getReviewsForUser(userId: string): Promise<Review[]> {
+  const response = await axios.get(`/user/${userId}/reviews`);
+  return response.data;
+}
+
+export async function getLikesForUser(userId: string): Promise<Review[]> {
+  const response = await axios.get(`/user/${userId}/likes`);
+  return response.data;
 }

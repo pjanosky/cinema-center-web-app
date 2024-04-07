@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { Movie } from "../types";
 import "./index.css";
 import Poster from "./poster";
-import { FaChevronRight } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function MoviesList({ movies }: { movies: Movie[] }) {
   return (
@@ -19,7 +20,7 @@ export default function MoviesList({ movies }: { movies: Movie[] }) {
                   className="flex-shrink-0"
                   style={{ width: "92px", height: "138px" }}
                 >
-                  <Poster path={`/w92${movie.poster_path}`} />
+                  <Poster size="w92" path={movie.poster_path} />
                 </div>
                 <div className="flex-grow-1 flex-shrink-1">
                   <span style={{ color: "black" }}>
@@ -41,9 +42,11 @@ export default function MoviesList({ movies }: { movies: Movie[] }) {
                     </div>
                   </span>
                 </div>
-                <FaChevronRight
-                  className="align-self-center flex-shrink-0"
+
+                <FontAwesomeIcon
+                  icon={faChevronRight}
                   style={{ color: "lightgray" }}
+                  className="align-self-center flex-shrink-0"
                 />
               </div>
             </Link>

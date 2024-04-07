@@ -2,7 +2,17 @@ export type Role = "user" | "editor";
 
 export type List = {};
 
-export type Review = {};
+export type Rating = 1 | 2 | 3 | 4 | 5;
+export type Review = {
+  _id: string;
+  date: string;
+  rating: Rating;
+  title: string;
+  content: string;
+  userId: string;
+  movieId: string;
+  likes: string[];
+};
 
 export type User = {
   _id: string;
@@ -28,6 +38,21 @@ export type Movie = {
   video?: boolean;
   vote_average?: number;
   vote_count?: number;
+};
+
+export type CastMember = {
+  adult?: boolean;
+  gender?: number;
+  id: number;
+  known_for_department?: string;
+  name: string;
+  original_name?: string;
+  popularity?: number;
+  profile_path?: string;
+  cast_id?: string;
+  character?: string;
+  credit_id?: string;
+  order: number;
 };
 
 export type MovieDetails = {
@@ -76,6 +101,5 @@ export type MovieDetails = {
   vote_average?: number;
   vote_count?: number;
   similar: Movie[];
-  lists: List[];
-  reviews: Review[];
+  cast: CastMember[];
 };

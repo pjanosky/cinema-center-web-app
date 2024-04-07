@@ -1,22 +1,20 @@
-import { FaStar } from "react-icons/fa";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function RatingStars({
-  voteAverage,
-  voteCount,
-}: {
-  voteAverage: number | undefined;
-  voteCount: number | undefined;
-}) {
-  if (!voteAverage) {
-    return <></>;
-  }
-  const stars = Math.round(voteAverage / 2);
-  return (
-    <div className="d-flex align-items-center">
+export default function RatingStars({ stars }: { stars: number }) {
+  return stars < 1 || stars > 5 ? (
+    <></>
+  ) : (
+    <div>
       {Array.from({ length: 5 }, (_, i) => i + 1).map((i) => (
-        <FaStar key={i} style={{ color: i <= stars ? "gold" : "lightgray" }} />
+        <FontAwesomeIcon
+          icon={faStar}
+          key={i}
+          style={{
+            color: i <= Math.round(stars) ? "gold" : "lightgray",
+          }}
+        />
       ))}
-      {voteCount && <span className="ms-1">({voteCount} Ratings)</span>}
     </div>
   );
 }

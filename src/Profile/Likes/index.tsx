@@ -5,7 +5,7 @@ import { useRefreshOnUnauthorized } from "../../Account/hooks";
 import ReviewsList from "../../Details/reviewsList";
 import { useParams } from "react-router";
 
-export default function Reviews({ user }: { user: User }) {
+export default function Likes({ user }: { user: User }) {
   const { id } = useParams();
   const [reviews, setReviews] = useState<Review[]>([]);
   const refreshOnUnauthorized = useRefreshOnUnauthorized();
@@ -15,7 +15,7 @@ export default function Reviews({ user }: { user: User }) {
       return;
     }
     try {
-      const response = await client.getReviewsForUser(id);
+      const response = await client.getLikesForUser(id);
       setReviews(response);
     } catch (error) {
       refreshOnUnauthorized(error);
@@ -29,8 +29,12 @@ export default function Reviews({ user }: { user: User }) {
 
   return (
     <div>
-      <h2>Reviews</h2>
-      <ReviewsList reviews={reviews} setReviews={setReviews} />
+      <h2>Likes</h2>
+      <ReviewsList
+        reviews={reviews}
+        setReviews={setReviews}
+        showReview={(review) => !!id && review.likes.includes(id)}
+      />
     </div>
   );
 }

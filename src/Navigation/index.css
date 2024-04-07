@@ -1,5 +1,5 @@
 .cc-navigation {
-  width: 250px;
+  width: 100%;
   background-color: white;
   height: 100%;
 }
@@ -37,11 +37,7 @@
 .cc-nav-bar {
   background-color: white;
   color: var(--accent-color);
-  width: 100%;
-  display: flex;
-  align-items: center;
   padding: 10px;
-  position: absolute;
 }
 
 .cc-nav-bar svg {

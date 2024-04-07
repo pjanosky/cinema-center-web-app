@@ -1,16 +1,22 @@
 import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { InputGroup, Button, Alert, Form } from "react-bootstrap";
-import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { useAssertUser, useRefreshUser } from "../../Account/hooks";
+import { InputGroup, Button, Alert, Form, Modal } from "react-bootstrap";
+import {
+  useAssertUser,
+  useRefreshOnUnauthorized,
+  useRefreshUser,
+} from "../../Account/hooks";
 import * as client from "../../Account/client";
 import "./index.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Account() {
   const user = useAssertUser();
   const { id } = useParams();
   const refreshUser = useRefreshUser();
+  const navigate = useNavigate();
   const [account, setAccount] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -28,6 +34,9 @@ export default function Account() {
     message: "",
     variant: "danger",
   });
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const refreshOnUnauthorized = useRefreshOnUnauthorized();
+
   useEffect(() => {
     setAccount((account) => {
       return {
@@ -47,12 +56,13 @@ export default function Account() {
     setProfileAlert({ message: "", variant: "" });
     try {
       await client.updateProfile(account);
-      refreshUser();
+      await refreshUser();
       setProfileAlert({
         message: "Profile updated successfully",
         variant: "success",
       });
     } catch (error) {
+      refreshOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setProfileAlert({
           message: error.response.data,
@@ -76,14 +86,24 @@ export default function Account() {
         message: "Password updated",
         variant: "success",
       });
-      refreshUser();
+      await refreshUser();
     } catch (error) {
+      refreshOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setPasswordAlert({
           message: error.response.data,
           variant: "danger",
         });
       }
+    }
+  };
+  const deleteAccount = async () => {
+    try {
+      await client.deleteProfile();
+      await refreshUser();
+      navigate("/login", { replace: true });
+    } catch (error) {
+      refreshOnUnauthorized(error);
     }
   };
 
@@ -176,7 +196,7 @@ export default function Account() {
               onClick={() => setShowPassword((show) => !show)}
               variant="secondary"
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </Button>
           </InputGroup>
         </label>
@@ -198,7 +218,7 @@ export default function Account() {
               onClick={() => setShowPassword((show) => !show)}
               variant="secondary"
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </Button>
           </InputGroup>
         </label>
@@ -220,7 +240,7 @@ export default function Account() {
               onClick={() => setShowPassword((show) => !show)}
               variant="secondary"
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </Button>
           </InputGroup>
           {showPasswordError && (
@@ -240,6 +260,36 @@ export default function Account() {
       {passwordAlert.message && (
         <Alert variant={passwordAlert.variant}>{passwordAlert.message}</Alert>
       )}
+      <h3 className="pt-4">Delete Account</h3>
+      <div className="mb-3">
+        <button
+          className="btn btn-danger w-100"
+          onClick={() => setShowDeleteAccountModal(true)}
+        >
+          Delete Account
+        </button>
+        <Modal
+          show={showDeleteAccountModal}
+          onHide={() => setShowDeleteAccountModal(false)}
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Are you sure?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Deleting your account cannot be undone.</Modal.Body>
+          <Modal.Footer>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowDeleteAccountModal(false)}
+            >
+              Cancel
+            </button>
+            <button className="btn btn-danger" onClick={deleteAccount}>
+              Delete Account
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
   );
 }

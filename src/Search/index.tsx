@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button, InputGroup } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
 import * as client from "./client";
 import UserList from "../Profile/Followers/userList";
 import MoviesList from "./moviesList";
 import { Movie, User } from "../types";
 import { useSearchParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 function useIndependentSearchParam(
   name: string
@@ -77,7 +78,7 @@ export default function Search() {
           onKeyDown={(e) => e.key === "Enter" && setQuery(queryInput)}
         />
         <Button onClick={() => setQuery(queryInput)}>
-          <FaSearch />
+          <FontAwesomeIcon icon={faSearch} />
         </Button>
       </InputGroup>
       {query && <h2>Results</h2>}

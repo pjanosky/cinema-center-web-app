@@ -5,11 +5,14 @@ import * as client from "../client";
 import { isAxiosError } from "axios";
 import { Role } from "../../types";
 import { Alert, Button, Form, InputGroup } from "react-bootstrap";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./index.css";
+import { useSearchParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const refreshUser = useRefreshUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,6 +23,11 @@ export default function Register() {
   const [role, setRole] = useState<Role>("user");
   const [error, setError] = useState(undefined as string | undefined);
 
+  const redirect = searchParams.get("redirect");
+  const redirectParams = Array.from(searchParams.entries())
+    .filter(([key, value]) => key !== "redirect")
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
   const showPasswordError =
     password && confirmPassword && password !== confirmPassword;
   const register = async () => {
@@ -30,8 +38,12 @@ export default function Register() {
     }
     try {
       await client.register({ username, password, name, email, role });
-      refreshUser();
-      navigate("/home");
+      await refreshUser();
+      if (redirect) {
+        navigate(`${redirect}?${redirectParams}`, { replace: true });
+      } else {
+        navigate("/home", { replace: true });
+      }
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 400) {
         setError(error.response.data);
@@ -97,7 +109,7 @@ export default function Register() {
                 onClick={() => setShowPassword((show) => !show)}
                 variant="secondary"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </Button>
             </InputGroup>
           </label>
@@ -117,7 +129,7 @@ export default function Register() {
                 onClick={() => setShowPassword((show) => !show)}
                 variant="secondary"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </Button>
             </InputGroup>
             {showPasswordError && (

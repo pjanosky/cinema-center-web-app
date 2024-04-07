@@ -18,8 +18,8 @@ export default function ProfileNavigation({
 
   const links =
     user.role === "user"
-      ? ["Lists", "Followers", "Following", ...currentUserLinks]
-      : ["Reviews", ...currentUserLinks];
+      ? ["Reviews", "Likes", "Followers", "Following", ...currentUserLinks]
+      : ["Lists", ...currentUserLinks];
 
   return (
     <div className="cc-profile-nav">
