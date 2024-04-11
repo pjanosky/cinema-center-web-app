@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MovieDetails, Review, User } from "../types";
+import { List, ListEntry, MovieDetails, Review, User } from "../types";
 
 export async function getMoveDetails(id: string): Promise<MovieDetails> {
   const response = await axios.get(`/movie/${id}`);
@@ -44,5 +44,31 @@ export async function unlikeReview(
 
 export async function getLikesForReview(reviewId: string): Promise<User[]> {
   const response = await axios.get(`/reviews/${reviewId}/likes`);
+  return response.data;
+}
+
+export async function getListsForUser(userId: string): Promise<List[]> {
+  const response = await axios.get(`/user/${userId}/lists`);
+  return response.data;
+}
+
+export async function getListsForMovie(movieId: string): Promise<List[]> {
+  const response = await axios.get(`/movie/${movieId}/lists`);
+  return response.data;
+}
+
+export async function addMovieToList(
+  listId: string,
+  { movieId, description }: ListEntry
+): Promise<List> {
+  console.log("Adding movie to list", listId, movieId, description);
+  const response = await axios.post(`/list/${listId}/${movieId}`, {
+    description,
+  });
+  return response.data;
+}
+
+export async function deleteMovieFromList(listId: string, movieId: string) {
+  const response = await axios.delete(`/list/${listId}/${movieId}`);
   return response.data;
 }

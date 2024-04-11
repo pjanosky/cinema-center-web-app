@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import * as client from "./client";
 import { useCallback, useEffect, useState } from "react";
-import { MovieDetails, Review } from "../types";
+import { List, MovieDetails, Review } from "../types";
 import Poster from "../Search/poster";
 import MoviesList from "../Search/moviesList";
 import ReviewEditor from "./reviewEditor";
@@ -9,7 +9,8 @@ import RatingStars from "./ratingStars";
 import ReviewsList from "./reviewsList";
 import { useRefreshOnUnauthorized, useUser } from "../Account/hooks";
 import { isAxiosError } from "axios";
-import { IfUser } from "../Account/components";
+import { IfEditor, IfUser } from "../Account/components";
+import ListsList from "../Profile/Lists/listsList";
 
 export default function Details() {
   const { id: movieId } = useParams();
@@ -26,6 +27,10 @@ export default function Details() {
     date: "",
     likes: [],
   });
+  const [userLists, setUserLists] = useState<List[]>([]);
+  const [movieLists, setMovieLists] = useState<List[]>([]);
+  const [description, setDescription] = useState("");
+  const [selectedListId, setSelectedListId] = useState("");
   const [error, setError] = useState("");
   const refreshOnUnauthorized = useRefreshOnUnauthorized();
 
@@ -124,11 +129,53 @@ export default function Details() {
       }
     }
   };
-
+  const fetchUserLists = useCallback(async () => {
+    if (!currentUser || currentUser.role !== "editor") return;
+    try {
+      const lists = await client.getListsForUser(currentUser._id);
+      setUserLists(lists);
+      setSelectedListId(lists[0]?._id || "");
+    } catch (error) {
+      console.log(error);
+    }
+  }, [currentUser]);
+  const fetchMovieLists = useCallback(async () => {
+    if (!movieId) return;
+    try {
+      const lists = await client.getListsForMovie(movieId);
+      setMovieLists(lists);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [movieId]);
+  const addToList = async () => {
+    if (!selectedListId || !movieId) return;
+    try {
+      const updatedList = await client.addMovieToList(selectedListId, {
+        movieId: movieId,
+        description: description,
+      });
+      setMovieLists((lists) => [...lists, updatedList]);
+      setDescription("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const deleteFromList = async (listId: string) => {
+    if (!movieId) return;
+    try {
+      await client.deleteMovieFromList(listId, movieId);
+      setMovieLists((lists) => lists.filter((list) => list._id !== listId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchDetails();
     fetchReviews();
-  }, [fetchDetails, fetchReviews]);
+    fetchUserLists();
+    fetchMovieLists();
+  }, [fetchDetails, fetchUserLists, fetchReviews, fetchMovieLists]);
 
   if (!details) {
     return <div>Loading...</div>;
@@ -222,6 +269,55 @@ export default function Details() {
           {error && <div className="alert alert-danger">{error}</div>}
         </div>
       </IfUser>
+      <IfEditor>
+        <div className="mb-4" style={{ maxWidth: "800px" }}>
+          <h2>Add to List</h2>
+          <div className="mb-3">
+            <select
+              className="form-select"
+              value={selectedListId}
+              onChange={(e) => setSelectedListId(e.target.value)}
+            >
+              {userLists
+                .filter(
+                  (userList) =>
+                    !movieLists.find(
+                      (movieList) => movieList._id === userList._id
+                    )
+                )
+                .map((list) => (
+                  <option key={list._id} value={list._id}>
+                    {list.title}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <textarea
+              className="form-control"
+              value={description}
+              rows={5}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Description"
+            ></textarea>
+          </div>
+          <div className="mb-3">
+            <button className="btn btn-primary" onClick={addToList}>
+              Add
+            </button>
+          </div>
+        </div>
+        {movieLists.length > 0 && (
+          <div className="mb-3">
+            <h2>Lists with this movie</h2>
+            <ListsList
+              lists={movieLists}
+              setLists={setMovieLists}
+              removeMovie={(listId) => deleteFromList(listId)}
+            ></ListsList>
+          </div>
+        )}
+      </IfEditor>
       {reviews.find((review) => review.userId !== currentUser?._id) && (
         <div className="mb-4">
           <h2>Other Reviews</h2>
@@ -234,15 +330,18 @@ export default function Details() {
           />
         </div>
       )}
-      <div className="mb-4">
-        <h2>Add to List</h2>
-        <ul>
-          <li>Create new list...</li>
-          <li>List 1</li>
-          <li>List 2</li>
-          <li>List 3</li>
-        </ul>
-      </div>
+      {(!currentUser || currentUser.role !== "editor") &&
+        movieLists.length > 0 && (
+          <div className="mb-3">
+            <h2>Lists with this movie</h2>
+            <ListsList
+              lists={movieLists}
+              setLists={setMovieLists}
+              removeMovie={(listId) => deleteFromList(listId)}
+            ></ListsList>
+          </div>
+        )}
+
       <div className="mb-4">
         <h2>Similar Movies</h2>
         <MoviesList movies={details.similar} />

@@ -1,7 +1,7 @@
-.cc-profile-nav a {
+.cc-profile-nav a:hover {
   color: var(--accent-color);
 }
 
-.cc-profile-nav a:hover {
-  color: var(--accent-color);
+.cc-profile-nav .active {
+  color: var(--accent-color) !important;
 }

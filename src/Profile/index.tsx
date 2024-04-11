@@ -46,10 +46,6 @@ export default function Profile() {
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center">

@@ -58,6 +58,7 @@ export default function Login() {
               className="form-control"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && login()}
             />
           </label>
         </div>
@@ -71,20 +72,21 @@ export default function Login() {
                 className="form-control"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && login()}
               />
-              <Button
+              <button
                 onClick={() => setShowPassword((show) => !show)}
-                variant="secondary"
+                className="btn btn-secondary"
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </Button>
+              </button>
             </InputGroup>
           </label>
         </div>
         <div className="mb-3">
-          <Button variant="primary" onClick={login} style={{ width: "100%" }}>
+          <button className="btn btn-primary" onClick={login}>
             Login
-          </Button>
+          </button>
         </div>
         {error && (
           <div className="mb-3">

@@ -16,6 +16,15 @@ code {
   --accent-color: #7253ed;
 }
 
+a {
+  text-decoration: none !important;
+  color: black !important;
+}
+
+a.cc-link:hover {
+  color: var(--accent-color) !important;
+}
+
 .btn-primary,
 .btn-primary:visited {
   background-color: var(--accent-color) !important;

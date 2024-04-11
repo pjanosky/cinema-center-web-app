@@ -14,6 +14,7 @@ import Search from "./Search";
 import Details from "./Details";
 import Navigation from "./Navigation";
 import { useQueryUser } from "./Account/hooks";
+import ListDetails from "./List";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="profile" element={<NavigateToProfile />} />
           <Route path="search/*" element={<Search />} />
           <Route path="details/:id/*" element={<Details />} />
+          <Route path="list/:id/*" element={<ListDetails />} />
         </Routes>
       </Navigation>
     </BrowserRouter>

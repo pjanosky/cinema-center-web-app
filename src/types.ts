@@ -1,6 +1,16 @@
-export type Role = "user" | "editor";
+export type ListEntry = {
+  movieId: string;
+  description: string;
+};
 
-export type List = {};
+export type List = {
+  _id: string;
+  date: string;
+  userId: string;
+  title: string;
+  description: string | undefined;
+  movies: ListEntry[];
+};
 
 export type Rating = 1 | 2 | 3 | 4 | 5;
 export type Review = {
@@ -12,15 +22,6 @@ export type Review = {
   userId: string;
   movieId: string;
   likes: string[];
-};
-
-export type User = {
-  _id: string;
-  username: string;
-  name: string;
-  email: string;
-  role: Role;
-  following: string[];
 };
 
 export type Movie = {
@@ -102,4 +103,7 @@ export type MovieDetails = {
   vote_count?: number;
   similar: Movie[];
   cast: CastMember[];
+  stars: number | undefined;
 };
+
+export type User = {};

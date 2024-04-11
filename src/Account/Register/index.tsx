@@ -105,12 +105,12 @@ export default function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button
+              <button
                 onClick={() => setShowPassword((show) => !show)}
-                variant="secondary"
+                className="btn btn-secondary"
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </Button>
+              </button>
             </InputGroup>
           </label>
         </div>
@@ -125,12 +125,12 @@ export default function Register() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <Button
+              <button
                 onClick={() => setShowPassword((show) => !show)}
-                variant="secondary"
+                className="btn btn-secondary"
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </Button>
+              </button>
             </InputGroup>
             {showPasswordError && (
               <Form.Text muted>Passwords do not match</Form.Text>
@@ -151,13 +151,9 @@ export default function Register() {
           </label>
         </div>
         <div className="mb-3">
-          <Button
-            variant="primary"
-            onClick={register}
-            style={{ width: "100%" }}
-          >
+          <button className="btn btn-primary" onClick={register}>
             Register
-          </Button>
+          </button>
         </div>
         {error && (
           <div className="mb-3">

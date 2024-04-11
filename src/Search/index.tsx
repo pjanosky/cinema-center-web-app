@@ -39,6 +39,7 @@ export default function Search() {
       return;
     }
     try {
+      setMode(mode);
       switch (mode) {
         case "users":
           const userResults = await client.searchUsers(query);
@@ -52,7 +53,7 @@ export default function Search() {
     } catch (error) {
       console.log(error);
     }
-  }, [mode, query]);
+  }, [mode, query, setMode]);
   useEffect(() => {
     search();
   }, [search]);

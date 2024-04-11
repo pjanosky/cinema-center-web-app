@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { InputGroup, Button, Alert, Form, Modal } from "react-bootstrap";
+import { InputGroup, Alert, Form, Modal } from "react-bootstrap";
 import {
   useAssertUser,
   useRefreshOnUnauthorized,
@@ -112,7 +112,7 @@ export default function Account() {
   }
 
   return (
-    <div className="cc-profile-account" style={{ maxWidth: "500px" }}>
+    <div className="cc-profile-account" style={{ maxWidth: "600px" }}>
       <h2>Account</h2>
       <h3>Information</h3>
       <div className="mb-3">
@@ -167,13 +167,9 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <Button
-          variant="primary"
-          onClick={updateProfile}
-          style={{ width: "100%" }}
-        >
-          Save Changes
-        </Button>
+        <button onClick={updateProfile} className="btn btn-primary">
+          Update Profile
+        </button>
       </div>
       {profileAlert.message && (
         <Alert variant={profileAlert.variant}>{profileAlert.message}</Alert>
@@ -192,12 +188,12 @@ export default function Account() {
                 setAccount({ ...account, oldPassword: e.target.value })
               }
             />
-            <Button
+            <button
               onClick={() => setShowPassword((show) => !show)}
-              variant="secondary"
+              className="btn btn-secondary"
             >
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </Button>
+            </button>
           </InputGroup>
         </label>
       </div>
@@ -214,12 +210,12 @@ export default function Account() {
                 setAccount({ ...account, newPassword: e.target.value })
               }
             />
-            <Button
+            <button
               onClick={() => setShowPassword((show) => !show)}
-              variant="secondary"
+              className="btn btn-secondary"
             >
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </Button>
+            </button>
           </InputGroup>
         </label>
       </div>
@@ -236,12 +232,12 @@ export default function Account() {
                 setAccount({ ...account, confirmPassword: e.target.value })
               }
             />
-            <Button
+            <button
               onClick={() => setShowPassword((show) => !show)}
-              variant="secondary"
+              className="btn btn-secondary"
             >
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </Button>
+            </button>
           </InputGroup>
           {showPasswordError && (
             <Form.Text muted>Passwords do not match</Form.Text>
@@ -249,13 +245,9 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <Button
-          variant="primary"
-          onClick={updatePassword}
-          style={{ width: "100%" }}
-        >
+        <button className="btn btn-primary" onClick={updatePassword}>
           Change Password
-        </Button>
+        </button>
       </div>
       {passwordAlert.message && (
         <Alert variant={passwordAlert.variant}>{passwordAlert.message}</Alert>
@@ -263,7 +255,7 @@ export default function Account() {
       <h3 className="pt-4">Delete Account</h3>
       <div className="mb-3">
         <button
-          className="btn btn-danger w-100"
+          className="btn btn-danger"
           onClick={() => setShowDeleteAccountModal(true)}
         >
           Delete Account

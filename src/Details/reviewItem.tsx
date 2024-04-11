@@ -70,13 +70,15 @@ export default function ReviewItem({
       <div className="d-flex justify-content-between">
         <div>
           <div className="fw-bold">
-            <Link to={`/details/${review.movieId}`}>{movieDetails?.title}</Link>
+            <Link to={`/details/${review.movieId}`} className="cc-link">
+              {movieDetails?.title}
+            </Link>
             {" - "}
             <span>{review.title}</span>
           </div>
           <RatingStars stars={review.rating} />
         </div>
-        <Link to={`/profile/${user?._id}`} className="text-end">
+        <Link to={`/profile/${user?._id}`} className="text-end cc-link">
           <div>{date}</div>
           <div>{user?.name}</div>
         </Link>
