@@ -1,22 +1,25 @@
-import { List } from "../types";
-import * as client from "../Profile/client";
+import listsClient from "../API/Lists/client";
+import { List } from "../API/Lists/types";
+import { useRefetchOnUnauthorized } from "../Account/hooks";
 
 export default function ListEditor({
   editingList,
   setEditingList,
-  updateList,
+  setList,
 }: {
   editingList: List;
   setEditingList: (list: List | undefined) => void;
-  updateList: (list: List) => void;
+  setList: (list: List) => void;
 }) {
-  const save = async () => {
+  const refetchOnUnauthorized = useRefetchOnUnauthorized();
+  const updateList = async () => {
     if (!editingList) return;
     try {
-      const updatedList = await client.updateList(editingList);
-      updateList(updatedList);
+      const updatedList = await listsClient.updateList(editingList);
+      setList(updatedList);
       setEditingList(undefined);
     } catch (error) {
+      refetchOnUnauthorized(error);
       console.log(error);
     }
   };
@@ -60,7 +63,7 @@ export default function ListEditor({
         >
           Cancel
         </button>
-        <button className="btn btn-primary" onClick={save}>
+        <button className="btn btn-primary" onClick={updateList}>
           Save
         </button>
       </div>

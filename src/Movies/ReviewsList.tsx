@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Review } from "../types";
-import * as client from "./client";
-import ReviewEditor from "./reviewEditor";
-import ReviewItem from "./reviewItem";
+import { Review } from "../API/Reviews/types";
+import reviewsClient from "../API/Reviews/client";
+import ReviewEditor from "./ReviewEditor";
+import ReviewItem from "./ReviewItem";
 
 export default function ReviewsList({
   reviews,
@@ -20,7 +20,7 @@ export default function ReviewsList({
     setEditingReview((editingReview) => editingReview && setter(editingReview));
   const deleteReview = async (review: Review) => {
     try {
-      await client.deleteReview(review._id);
+      await reviewsClient.deleteReview(review._id);
       setReviews(reviews.filter((r) => r._id !== review._id));
     } catch (error) {
       setError("Error deleting review");
@@ -28,7 +28,7 @@ export default function ReviewsList({
   };
   const updateReview = async (review: Review) => {
     try {
-      const updatedReview = await client.updateReview(review);
+      const updatedReview = await reviewsClient.updateReview(review);
       setReviews(
         reviews.map((review) =>
           review._id === updatedReview._id ? updatedReview : review

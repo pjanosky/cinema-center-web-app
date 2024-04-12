@@ -5,3 +5,15 @@
 .cc-profile-nav .active {
   color: var(--accent-color) !important;
 }
+
+.cc-profile-dropdown a:active,
+.cc-profile-dropdown .active {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+/* .cc-profile-dropdown a,
+.cc-profile-dropdown div,
+.cc-profile-dropdown button {
+  width: 100%;
+} */

@@ -1,5 +1,5 @@
 import "./index.css";
-import NavigationLinks from "./navigationLinks";
+import NavigationLinks from "./NavigationLinks";
 import "./index.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -28,10 +28,14 @@ export default function Navigation({
       >
         <div
           className="cc-nav-bar d-flex align-items-center"
-          style={{ height: navBarHeight, pointerEvents: "auto" }}
+          style={{
+            height: navBarHeight,
+            pointerEvents: "auto",
+            borderBottom: "1px solid lightgray",
+          }}
         >
           <button
-            className="flex-shrink-0"
+            className="flex-shrink-0 d-flex align-items-center justify-content-center"
             onClick={() => setShowSidebar((show) => !show)}
           >
             <FontAwesomeIcon icon={faBars} />
@@ -46,12 +50,12 @@ export default function Navigation({
         </div>
         {showSidebar && (
           <div
-            className="d-flex flex-grow-1 align-items-stretch"
+            className="d-flex flex-grow-1 align-items-stretch h-100"
             style={{ pointerEvents: "auto" }}
           >
             <div
-              className="flex-shrink-0 flex-grow-1"
-              style={{ maxWidth: sidebarWidth }}
+              className="flex-shrink-0 flex-grow-1 h-100"
+              style={{ maxWidth: sidebarWidth, overflowY: "auto" }}
             >
               <NavigationLinks onClick={() => setShowSidebar(false)} />
             </div>
@@ -65,8 +69,12 @@ export default function Navigation({
       <div className="d-block d-md-none" style={{ height: navBarHeight }} />
       <div className="d-flex">
         <div
-          className="flex-shrink-0 d-none d-md-block position-fixed"
-          style={{ width: sidebarWidth }}
+          className="flex-shrink-0 d-none d-md-block position-fixed h-100"
+          style={{
+            width: sidebarWidth,
+            borderRight: "1px solid lightgray",
+            overflowY: "auto",
+          }}
         >
           <NavigationLinks />
         </div>

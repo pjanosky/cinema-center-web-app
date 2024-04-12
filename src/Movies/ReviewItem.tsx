@@ -1,16 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
-import { useUser } from "../Account/hooks";
-import { MovieDetails, Review, User } from "../types";
-import RatingStars from "./ratingStars";
-import * as userClient from "../Profile/client";
-import * as movieClient from "../Details/client";
+import { useCurrentUser } from "../Account/hooks";
 import { Link } from "react-router-dom";
 import "./index.css";
 import { IfMatchingUser, IfUser } from "../Account/components";
-import LikesModalButton from "./likesModalButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
+import moviesClient from "../API/Movies/client";
+import { Review } from "../API/Reviews/types";
+import { User } from "../API/Users/types";
+import { Movie } from "../API/Movies/types";
+import reviewsClient from "../API/Reviews/client";
+import usersClient from "../API/Users/client";
+import RatingStars from "./RatingStars";
+import LikesModalButton from "./LikesModalButton";
 
 export default function ReviewItem({
   review,
@@ -23,16 +26,16 @@ export default function ReviewItem({
   editReview: (review: Review) => void;
   setReview: (review: Review) => void;
 }) {
-  const currentUser = useUser();
+  const currentUser = useCurrentUser();
   const [user, setUser] = useState<User | undefined>();
-  const [movieDetails, setMovieDetails] = useState<MovieDetails | undefined>();
+  const [movie, setMovie] = useState<Movie | undefined>();
 
   const liked = currentUser && review.likes.includes(currentUser._id);
   const toggleLike = async () => {
     try {
       const updatedReview = liked
-        ? await movieClient.unlikeReview(review._id, currentUser!._id)
-        : await movieClient.likeReview(review._id, currentUser!._id);
+        ? await reviewsClient.unlikeReview(review._id, currentUser!._id)
+        : await reviewsClient.likeReview(review._id, currentUser!._id);
       setReview(updatedReview);
     } catch (error) {
       console.log(error);
@@ -41,7 +44,7 @@ export default function ReviewItem({
 
   const fetchUser = useCallback(async () => {
     try {
-      const user = await userClient.getUser(review.userId);
+      const user = await usersClient.getUserById(review.userId);
       setUser(user);
     } catch (error) {
       console.log(error);
@@ -49,8 +52,8 @@ export default function ReviewItem({
   }, [review.userId]);
   const fetchMovieDetails = useCallback(async () => {
     try {
-      const movieDetails = await movieClient.getMoveDetails(review.movieId);
-      setMovieDetails(movieDetails);
+      const movie = await moviesClient.getMovieById(review.movieId);
+      setMovie(movie);
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +74,7 @@ export default function ReviewItem({
         <div>
           <div className="fw-bold">
             <Link to={`/details/${review.movieId}`} className="cc-link">
-              {movieDetails?.title}
+              {movie?.title}
             </Link>
             {" - "}
             <span>{review.title}</span>
@@ -83,7 +86,9 @@ export default function ReviewItem({
           <div>{user?.name}</div>
         </Link>
       </div>
-      <div className="my-1">{review.content}</div>
+      <div className="my-1" style={{ whiteSpace: "pre-wrap" }}>
+        {review.content}
+      </div>
       <div className="d-flex gap-2 align-items-center">
         <IfUser>
           <button

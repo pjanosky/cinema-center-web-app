@@ -1,27 +1,27 @@
 import { useCallback, useEffect, useState } from "react";
-import { Review, User } from "../../types";
-import * as client from "../client";
-import { useRefreshOnUnauthorized } from "../../Account/hooks";
-import ReviewsList from "../../Details/reviewsList";
+import { useRefetchOnUnauthorized } from "../../Account/hooks";
+import ReviewsList from "../../Movies/ReviewsList";
 import { useParams } from "react-router";
+import { Review } from "../../API/Reviews/types";
+import reviewsClient from "../../API/Reviews/client";
 
-export default function Reviews({ user }: { user: User }) {
+export default function Reviews() {
   const { id } = useParams();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const refreshOnUnauthorized = useRefreshOnUnauthorized();
+  const refetchOnUnauthorized = useRefetchOnUnauthorized();
 
   const fetchReviews = useCallback(async () => {
     if (!id) {
       return;
     }
     try {
-      const response = await client.getReviewsForUser(id);
+      const response = await reviewsClient.getReviewsByUser(id);
       setReviews(response);
     } catch (error) {
-      refreshOnUnauthorized(error);
+      refetchOnUnauthorized(error);
       console.log(error);
     }
-  }, [id, refreshOnUnauthorized]);
+  }, [id, refetchOnUnauthorized]);
 
   useEffect(() => {
     fetchReviews();

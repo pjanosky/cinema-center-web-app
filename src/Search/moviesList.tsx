@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { Movie } from "../types";
 import "./index.css";
-import Poster from "./poster";
+import Poster from "./MoviePoster";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { MovieResult } from "../API/Movies/types";
 
-export default function MoviesList({ movies }: { movies: Movie[] }) {
+export default function MoviesList({ movies }: { movies: MovieResult[] }) {
   return (
     <div className="cc-movies-list">
       <ul className="list-group">

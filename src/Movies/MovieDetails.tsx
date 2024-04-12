@@ -1,21 +1,25 @@
 import { useParams } from "react-router";
-import * as client from "./client";
 import { useCallback, useEffect, useState } from "react";
-import { List, MovieDetails, Review } from "../types";
-import Poster from "../Search/poster";
-import MoviesList from "../Search/moviesList";
-import ReviewEditor from "./reviewEditor";
-import RatingStars from "./ratingStars";
-import ReviewsList from "./reviewsList";
-import { useRefreshOnUnauthorized, useUser } from "../Account/hooks";
+import Poster from "../Search/MoviePoster";
+import MoviesList from "../Search/MoviesList";
+import ReviewsList from "./ReviewsList";
+import { useRefetchOnUnauthorized, useCurrentUser } from "../Account/hooks";
 import { isAxiosError } from "axios";
-import { IfEditor, IfUser } from "../Account/components";
-import ListsList from "../Profile/Lists/listsList";
+import { IfEditor, IfNotEditor, IfUser } from "../Account/components";
+import ListsList from "../List/ListsList";
+import moviesClient from "../API/Movies/client";
+import reviewsClient from "../API/Reviews/client";
+import listsClient from "../API/Lists/client";
+import { List } from "../API/Lists/types";
+import { Movie } from "../API/Movies/types";
+import { Review } from "../API/Reviews/types";
+import RatingStars from "./RatingStars";
+import ReviewEditor from "./ReviewEditor";
 
-export default function Details() {
+export default function MovieDetails() {
   const { id: movieId } = useParams();
-  const currentUser = useUser();
-  const [details, setDetails] = useState<MovieDetails | undefined>();
+  const currentUser = useCurrentUser();
+  const [details, setMovie] = useState<Movie | undefined>();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [userReview, setUserReview] = useState<Review>({
     _id: "",
@@ -32,7 +36,7 @@ export default function Details() {
   const [description, setDescription] = useState("");
   const [selectedListId, setSelectedListId] = useState("");
   const [error, setError] = useState("");
-  const refreshOnUnauthorized = useRefreshOnUnauthorized();
+  const refetchOnUnauthorized = useRefetchOnUnauthorized();
 
   const hasUserReview =
     reviews.find((review) => review.userId === currentUser?._id) !== undefined;
@@ -41,14 +45,18 @@ export default function Details() {
       ? reviews.reduce((total, review) => total + review.rating, 0) /
         reviews.length
       : -1;
+  const unaddedUserLists = userLists.filter(
+    (userList) =>
+      !movieLists.find((movieList) => movieList._id === userList._id)
+  );
 
   const fetchDetails = useCallback(async () => {
     if (!movieId) {
       return;
     }
     try {
-      const details = await client.getMoveDetails(movieId);
-      setDetails(details);
+      const movie = await moviesClient.getMovieById(movieId);
+      setMovie(movie);
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +66,7 @@ export default function Details() {
       return;
     }
     try {
-      const reviews = await client.getReviewsForMovie(movieId);
+      const reviews = await reviewsClient.getReviewsByMovie(movieId);
       setReviews(reviews);
       const userReview = reviews.find(
         (review) => review.userId === currentUser?._id
@@ -73,16 +81,11 @@ export default function Details() {
   const addReview = async () => {
     setError("");
     try {
-      const newReview = await client.addReview(userReview);
+      const newReview = await reviewsClient.createReview(userReview);
       setReviews((reviews) => [...reviews, newReview]);
       setUserReview(newReview);
     } catch (error) {
-      refreshOnUnauthorized(error);
-      console.log(
-        error,
-        isAxiosError(error),
-        isAxiosError(error) && error.response?.status
-      );
+      refetchOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setError(error.response.data || "Error adding review");
       }
@@ -91,7 +94,7 @@ export default function Details() {
   const updateReview = async () => {
     setError("");
     try {
-      const updatedReview = await client.updateReview(userReview);
+      const updatedReview = await reviewsClient.updateReview(userReview);
       setReviews((reviews) =>
         reviews.map((review) =>
           review._id === updatedReview._id ? updatedReview : review
@@ -99,7 +102,7 @@ export default function Details() {
       );
       setUserReview(updatedReview);
     } catch (error) {
-      refreshOnUnauthorized(error);
+      refetchOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setError(error.response.data || "Error updating review");
       }
@@ -108,7 +111,7 @@ export default function Details() {
   const deleteReview = async () => {
     setError("");
     try {
-      await client.deleteReview(userReview._id);
+      await reviewsClient.deleteReview(userReview._id);
       setReviews((reviews) =>
         reviews.filter((review) => review._id !== userReview._id)
       );
@@ -123,7 +126,7 @@ export default function Details() {
         likes: [],
       });
     } catch (error) {
-      refreshOnUnauthorized(error);
+      refetchOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setError(error.response.data || "Error deleting review");
       }
@@ -132,7 +135,7 @@ export default function Details() {
   const fetchUserLists = useCallback(async () => {
     if (!currentUser || currentUser.role !== "editor") return;
     try {
-      const lists = await client.getListsForUser(currentUser._id);
+      const lists = await listsClient.getListsByUser(currentUser._id);
       setUserLists(lists);
       setSelectedListId(lists[0]?._id || "");
     } catch (error) {
@@ -142,7 +145,7 @@ export default function Details() {
   const fetchMovieLists = useCallback(async () => {
     if (!movieId) return;
     try {
-      const lists = await client.getListsForMovie(movieId);
+      const lists = await listsClient.getListsByMovie(movieId);
       setMovieLists(lists);
     } catch (error) {
       console.log(error);
@@ -150,26 +153,23 @@ export default function Details() {
   }, [movieId]);
   const addToList = async () => {
     if (!selectedListId || !movieId) return;
+    setError("");
     try {
-      const updatedList = await client.addMovieToList(selectedListId, {
+      const updatedList = await listsClient.addEntryToList(selectedListId, {
         movieId: movieId,
         description: description,
       });
       setMovieLists((lists) => [...lists, updatedList]);
       setDescription("");
+      setSelectedListId(unaddedUserLists[0]?._id);
     } catch (error) {
-      console.log(error);
+      refetchOnUnauthorized(error);
+      if (isAxiosError(error) && error.response?.status === 400) {
+        setError(error.response?.data || "Error adding to list");
+      }
     }
   };
-  const deleteFromList = async (listId: string) => {
-    if (!movieId) return;
-    try {
-      await client.deleteMovieFromList(listId, movieId);
-      setMovieLists((lists) => lists.filter((list) => list._id !== listId));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   useEffect(() => {
     fetchDetails();
     fetchReviews();
@@ -177,21 +177,19 @@ export default function Details() {
     fetchMovieLists();
   }, [fetchDetails, fetchUserLists, fetchReviews, fetchMovieLists]);
 
-  if (!details) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
       <div className="w-100 mb-4">
-        <Poster
-          size="w1280"
-          path={details.backdrop_path}
-          showPlaceholder={false}
-        />
+        {details?.backdrop_path && (
+          <Poster
+            size="w1280"
+            path={details.backdrop_path}
+            showPlaceholder={false}
+          />
+        )}
       </div>
       <div className="mb-4">
-        <h1>{details.title}</h1>
+        <h1>{details?.title || ""}</h1>
 
         <div style={{ columnGap: "25px" }} className="d-flex flex-wrap">
           {reviews.length > 0 && (
@@ -203,23 +201,24 @@ export default function Details() {
             </div>
           )}
           <div>
-            {details.genres &&
+            {details?.genres &&
               details.genres.map((genre) => genre.name).join(" | ")}
           </div>
           <div>
-            {details.release_date &&
+            {details?.release_date &&
               `Released ${new Date(details.release_date).getFullYear()}`}
           </div>
-          <div>{details.runtime && details.runtime} Minutes</div>
+          <div>{details?.runtime && details.runtime} Minutes</div>
         </div>
-        <div className="my-1">{details.overview && details.overview}</div>
+        <div className="my-1">{details?.overview && details.overview}</div>
       </div>
-      {details.cast.length > 0 && (
+      {details && details.cast.length > 0 && (
         <div className="mb-4 w-100">
           <h2>Cast</h2>
           <div className="d-flex flex-wrap gap-3">
             {details.cast.map((member) => (
               <div
+                key={member.id}
                 style={{
                   width: "100px",
                   textAlign: "center",
@@ -248,7 +247,7 @@ export default function Details() {
       )}
       <IfUser>
         <div className="mb-4">
-          <h2>Write your review</h2>
+          <h2>My Review</h2>
           <ReviewEditor review={userReview} setReview={setUserReview} />
           <div className="mb-3 d-flex gap-2">
             {hasUserReview ? (
@@ -277,19 +276,18 @@ export default function Details() {
               className="form-select"
               value={selectedListId}
               onChange={(e) => setSelectedListId(e.target.value)}
+              disabled={unaddedUserLists.length === 0}
             >
-              {userLists
-                .filter(
-                  (userList) =>
-                    !movieLists.find(
-                      (movieList) => movieList._id === userList._id
-                    )
-                )
-                .map((list) => (
-                  <option key={list._id} value={list._id}>
-                    {list.title}
-                  </option>
-                ))}
+              {unaddedUserLists.map((list) => (
+                <option key={list._id} value={list._id}>
+                  {list.title}
+                </option>
+              ))}
+              {unaddedUserLists.length === 0 ? (
+                <option>No lists available</option>
+              ) : (
+                <></>
+              )}
             </select>
           </div>
           <div className="mb-3">
@@ -299,13 +297,19 @@ export default function Details() {
               rows={5}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Description"
+              disabled={unaddedUserLists.length === 0}
             ></textarea>
           </div>
           <div className="mb-3">
-            <button className="btn btn-primary" onClick={addToList}>
+            <button
+              className="btn btn-primary"
+              onClick={addToList}
+              disabled={unaddedUserLists.length === 0}
+            >
               Add
             </button>
           </div>
+          {error && <div className="alert alert-danger mb-3">{error}</div>}
         </div>
         {movieLists.length > 0 && (
           <div className="mb-3">
@@ -313,14 +317,14 @@ export default function Details() {
             <ListsList
               lists={movieLists}
               setLists={setMovieLists}
-              removeMovie={(listId) => deleteFromList(listId)}
+              movieId={movieId}
             ></ListsList>
           </div>
         )}
       </IfEditor>
-      {reviews.find((review) => review.userId !== currentUser?._id) && (
+      {reviews.length > 0 && (
         <div className="mb-4">
-          <h2>Other Reviews</h2>
+          <h2>Reviews</h2>
           <ReviewsList
             reviews={reviews}
             setReviews={setReviews}
@@ -330,22 +334,25 @@ export default function Details() {
           />
         </div>
       )}
-      {(!currentUser || currentUser.role !== "editor") &&
-        movieLists.length > 0 && (
+      <IfNotEditor>
+        {movieLists.length > 0 && (
           <div className="mb-3">
             <h2>Lists with this movie</h2>
             <ListsList
               lists={movieLists}
               setLists={setMovieLists}
-              removeMovie={(listId) => deleteFromList(listId)}
+              movieId={movieId}
             ></ListsList>
           </div>
         )}
+      </IfNotEditor>
 
-      <div className="mb-4">
-        <h2>Similar Movies</h2>
-        <MoviesList movies={details.similar} />
-      </div>
+      {details && details.similar.length > 0 && (
+        <div className="mb-4">
+          <h2>Similar Movies</h2>
+          <MoviesList movies={details.similar} />
+        </div>
+      )}
     </div>
   );
 }

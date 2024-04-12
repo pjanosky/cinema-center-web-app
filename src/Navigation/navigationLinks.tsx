@@ -5,8 +5,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { IfAuthenticated, IfUnauthenticated } from "../Account/components";
-import { useUser, useRefreshUser } from "../Account/hooks";
-import * as client from "../Account/client";
+import { useCurrentUser, useRefetchUser } from "../Account/hooks";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,24 +13,27 @@ import {
   faRightFromBracket,
   faRightToBracket,
   faSearch,
-  faSignOutAlt,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import usersClient from "../API/Users/client";
 
 export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
-  const user = useUser();
+  const currentUser = useCurrentUser();
   const navigate = useNavigate();
-  const refreshUser = useRefreshUser();
+  const refreshUser = useRefetchUser();
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
+
   const redirectParams = Array.from(searchParams.entries())
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
-  const redirect = `redirect=${pathname}&${redirectParams}`;
+  const redirect = `redirect=${encodeURIComponent(
+    pathname.slice(1)
+  )}&${redirectParams}`;
 
   const logout = async () => {
     onClick && onClick();
-    await client.logout();
+    await usersClient.logout();
     await refreshUser();
     navigate("/login");
   };
@@ -50,12 +52,12 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
           </Link>
         </li>
         <li className={pathname.includes("home") ? "active" : ""}>
-          <Link onClick={onClick} to="home">
+          <Link onClick={onClick} to="/home">
             <FontAwesomeIcon icon={faHome} /> Home
           </Link>
         </li>
         <li className={pathname.includes("search") ? "active" : ""}>
-          <Link onClick={onClick} to="search">
+          <Link onClick={onClick} to="/search">
             <FontAwesomeIcon icon={faSearch} />
             Search
           </Link>
@@ -64,13 +66,13 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
           <li
             className={
               pathname.includes("profile") &&
-              user &&
-              pathname.split("/")[2] === user._id
+              currentUser &&
+              pathname.split("/")[2] === currentUser._id
                 ? "active"
                 : ""
             }
           >
-            <Link onClick={onClick} to={`profile/${user?._id || ""}`}>
+            <Link onClick={onClick} to="/profile">
               <FontAwesomeIcon icon={faUser} />
               Profile
             </Link>
@@ -84,13 +86,13 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
         </IfAuthenticated>
         <IfUnauthenticated>
           <li>
-            <Link onClick={onClick} to={`login?${redirect}`}>
+            <Link onClick={onClick} to={`/login?${redirect}`}>
               <FontAwesomeIcon icon={faRightToBracket} />
               Login
             </Link>
           </li>
           <li>
-            <Link onClick={onClick} to={`register?${redirect}`}>
+            <Link onClick={onClick} to={`/register?${redirect}`}>
               <FontAwesomeIcon icon={faUser} />
               Register
             </Link>

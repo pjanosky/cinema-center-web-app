@@ -1,47 +1,48 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import * as client from "../client";
-import { useRefreshUser, useUser } from "../hooks";
-import { Alert, Button, InputGroup } from "react-bootstrap";
-import "./index.css";
+import { useRefetchUser, useCurrentUser } from "../hooks";
 import { useSearchParams } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./index.css";
+import usersClient from "../../API/Users/client";
+import { InputGroup } from "react-bootstrap";
 
 export default function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const refreshUser = useRefreshUser();
-  const user = useUser();
+  const refreshUser = useRefetchUser();
+  const user = useCurrentUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(undefined as string | undefined);
-  useEffect(() => {
-    if (user) {
-      navigate("/home");
-    }
-  }, [navigate, user]);
 
   const redirect = searchParams.get("redirect");
   const redirectParams = Array.from(searchParams.entries())
     .filter(([key, value]) => key !== "redirect")
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
+
   const login = async () => {
     setError(undefined);
     try {
-      await client.login(username, password);
+      await usersClient.login(username, password);
       await refreshUser();
-      if (redirect) {
-        navigate(`${redirect}?${redirectParams}`, { replace: true });
-      } else {
-        navigate("/home", { replace: true });
-      }
     } catch {
       setError("Invalid username or password");
     }
   };
+
+  useEffect(() => {
+    if (!user) return;
+    if (redirect) {
+      navigate(`/${redirect}?${redirectParams}`, { replace: true });
+    } else {
+      navigate("/home", { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="cc-login">
@@ -90,7 +91,7 @@ export default function Login() {
         </div>
         {error && (
           <div className="mb-3">
-            <Alert variant="danger">{error}</Alert>
+            <div className="alert alert-danger">{error}</div>
           </div>
         )}
       </div>

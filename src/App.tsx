@@ -6,15 +6,15 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import Login from "./Account/Login";
-import Register from "./Account/Register";
-import Home from "./Home";
-import Profile from "./Profile";
-import Search from "./Search";
-import Details from "./Details";
-import Navigation from "./Navigation";
-import { useQueryUser } from "./Account/hooks";
-import ListDetails from "./List";
+import Login from "./Account/Login/Login";
+import Register from "./Account/Register/Register";
+import Home from "./Home/Home";
+import Profile from "./Profile/Profile";
+import Search from "./Search/Search";
+import MovieDetails from "./Movies/MovieDetails";
+import Navigation from "./Navigation/Navigation";
+import { useQueryCurrentUser } from "./Account/hooks";
+import ListDetails from "./List/ListDetails";
 
 function App() {
   return (
@@ -28,8 +28,8 @@ function App() {
           <Route path="profile/:id/*" element={<Profile />} />
           <Route path="profile" element={<NavigateToProfile />} />
           <Route path="search/*" element={<Search />} />
-          <Route path="details/:id/*" element={<Details />} />
-          <Route path="list/:id/*" element={<ListDetails />} />
+          <Route path="details/:id/*" element={<MovieDetails />} />
+          <Route path="lists/:id/*" element={<ListDetails />} />
         </Routes>
       </Navigation>
     </BrowserRouter>
@@ -38,14 +38,13 @@ function App() {
 
 function NavigateToProfile() {
   const navigate = useNavigate();
-  const { data, isPending } = useQueryUser();
+  const { data, isPending } = useQueryCurrentUser();
   useEffect(() => {
-    if (!isPending) {
-      if (data) {
-        navigate(`profile/${data._id}`);
-      } else {
-        navigate("login");
-      }
+    if (isPending) return;
+    if (data) {
+      navigate(`/profile/${data._id}`, { replace: true });
+    } else {
+      navigate("/login?redirect=profile", { replace: true });
     }
   }, [data, isPending, navigate]);
 

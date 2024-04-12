@@ -1,123 +1,92 @@
-import { useCallback, useEffect, useState } from "react";
-import { List, ListEntry, MovieDetails } from "../types";
-import * as movieClient from "../Details/client";
-import Poster from "../Search/poster";
 import { Link } from "react-router-dom";
-import { IfMatchingUser, IfUser } from "../Account/components";
-import * as client from "./client";
-import RatingStars from "../Details/ratingStars";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { IfMatchingUser } from "../Account/components";
+import { List } from "../API/Lists/types";
+import listsClient from "../API/Lists/client";
+import { useState } from "react";
+import ListEditor from "./ListEditor";
+import { useRefetchOnUnauthorized } from "../Account/hooks";
 
 export default function ListItem({
-  entry,
   list,
-  setEntry,
-  deleteEntry,
+  setLists,
+  movieId,
 }: {
-  entry: ListEntry;
   list: List;
-  setEntry: (entry: ListEntry) => void;
-  deleteEntry: (entry: ListEntry) => void;
+  setLists: (setter: (lists: List[]) => List[]) => void;
+  movieId?: string;
 }) {
-  const [movieDetails, setMovieDetails] = useState<MovieDetails | undefined>();
-  const [editingEntry, setEditingEntry] = useState<ListEntry | undefined>();
+  const [editingList, setEditingList] = useState<List | undefined>();
+  const refetchOnUnauthorized = useRefetchOnUnauthorized();
 
-  const fetchMovieDetails = useCallback(async () => {
+  const deleteList = async () => {
     try {
-      const movieDetails = await movieClient.getMoveDetails(entry.movieId);
-      setMovieDetails(movieDetails);
+      await listsClient.deleteList(list._id);
+      setLists((lists) => lists.filter((l) => l._id !== list._id));
     } catch (error) {
-      console.log(error);
-    }
-  }, [entry.movieId]);
-  const updateEntry = async () => {
-    if (!editingEntry) return;
-    try {
-      const updatedEntry = await client.updateMovieInList(
-        list._id,
-        editingEntry
-      );
-      setEntry(updatedEntry);
-      setEditingEntry(undefined);
-    } catch (error) {
+      refetchOnUnauthorized(error);
       console.log(error);
     }
   };
-  const removeEntry = async () => {
+  const removeEntryFromList = async () => {
+    if (!movieId) return;
     try {
-      await client.deleteMovieFromList(list._id, entry.movieId);
-      deleteEntry(entry);
+      await listsClient.removeEntryFromList(list._id, movieId);
+      setLists((lists) => lists.filter((l) => l._id !== list._id));
     } catch (error) {
+      refetchOnUnauthorized(error);
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    fetchMovieDetails();
-  }, [fetchMovieDetails]);
-
-  if (!movieDetails) {
-    return <></>;
-  }
-
-  return (
-    <div className="d-flex gap-3 my-2">
-      <div
-        style={{ width: "92px", height: "138px" }}
-        className="flex-shrink-0 flex-grow-0"
-      >
-        <Poster size="w92" path={movieDetails.poster_path} />
+  return editingList ? (
+    <div>
+      <ListEditor
+        editingList={editingList}
+        setEditingList={setEditingList}
+        setList={(updatedList) =>
+          setLists((lists) =>
+            lists.map((list) =>
+              list._id === updatedList._id ? updatedList : list
+            )
+          )
+        }
+      />
+    </div>
+  ) : (
+    <div>
+      <div className="fw-bold">{list.title}</div>
+      <div style={{ whiteSpace: "pre-wrap" }}>{list.description}</div>
+      <div className="mb-2">
+        {list.entries.length} Movie
+        {list.entries.length === 1 ? "" : "s"}
       </div>
-      <div className="flex-shrink-1 flex-grow-1 d-flex flex-column justify-content-between">
-        <div>
-          <Link to={`/details/${entry.movieId}`} className="fw-bold cc-link">
-            {movieDetails && movieDetails?.title}
-          </Link>
-          <IfUser>
-            <div className="d-flex gap-3" style={{ color: "black" }}>
-              {movieDetails.release_date &&
-                new Date(movieDetails.release_date).getFullYear()}
-              {movieDetails?.stars && (
-                <RatingStars stars={movieDetails.stars} />
-              )}
-            </div>
-          </IfUser>
-          {editingEntry ? (
-            <div>
-              <textarea
-                className="form-control"
-                value={editingEntry.description}
-                rows={5}
-                onChange={(e) =>
-                  setEditingEntry({
-                    ...editingEntry,
-                    description: e.target.value,
-                  })
-                }
-                placeholder="Description"
-              ></textarea>
-            </div>
+      <IfMatchingUser userId={list.userId}>
+        <div className="mb-2 d-flex gap-2">
+          {movieId ? (
+            <button className="btn btn-danger" onClick={removeEntryFromList}>
+              Remove from list
+            </button>
           ) : (
-            <div>{entry.description}</div>
+            <>
+              <button
+                className="btn btn-primary"
+                onClick={() => setEditingList(list)}
+              >
+                Edit
+              </button>
+              <button className="btn btn-danger" onClick={deleteList}>
+                Delete
+              </button>
+            </>
           )}
+          <Link
+            to={`/lists/${list._id}`}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <button className="btn btn-secondary">View Details</button>
+          </Link>
         </div>
-        <IfMatchingUser userId={list.userId}>
-          <div className="d-flex gap-2 mt-2">
-            <button
-              className="btn btn-primary"
-              onClick={() =>
-                editingEntry ? updateEntry() : setEditingEntry(entry)
-              }
-            >
-              {editingEntry ? "Save" : "Edit description"}
-            </button>
-            <button className="btn btn-danger" onClick={removeEntry}>
-              Remove
-            </button>
-          </div>
-        </IfMatchingUser>
-      </div>
+      </IfMatchingUser>
     </div>
   );
 }

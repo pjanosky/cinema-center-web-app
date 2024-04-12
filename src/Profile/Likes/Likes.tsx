@@ -1,27 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
-import { Review, User } from "../../types";
-import * as client from "../client";
-import { useRefreshOnUnauthorized } from "../../Account/hooks";
-import ReviewsList from "../../Details/reviewsList";
+import ReviewsList from "../../Movies/ReviewsList";
 import { useParams } from "react-router";
+import { Review } from "../../API/Reviews/types";
+import reviewsClient from "../../API/Reviews/client";
 
-export default function Likes({ user }: { user: User }) {
+export default function Likes() {
   const { id } = useParams();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const refreshOnUnauthorized = useRefreshOnUnauthorized();
 
   const fetchReviews = useCallback(async () => {
     if (!id) {
       return;
     }
     try {
-      const response = await client.getLikesForUser(id);
+      const response = await reviewsClient.getReviewsLikedByUser(id);
       setReviews(response);
     } catch (error) {
-      refreshOnUnauthorized(error);
       console.log(error);
     }
-  }, [id, refreshOnUnauthorized]);
+  }, [id]);
 
   useEffect(() => {
     fetchReviews();

@@ -2,25 +2,26 @@ import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { InputGroup, Alert, Form, Modal } from "react-bootstrap";
 import {
-  useAssertUser,
-  useRefreshOnUnauthorized,
-  useRefreshUser,
+  useAssertCurrentUser,
+  useRefetchOnUnauthorized,
+  useRefetchUser,
 } from "../../Account/hooks";
-import * as client from "../../Account/client";
-import "./index.css";
 import { useNavigate, useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import "./index.css";
+import usersClient from "../../API/Users/client";
 
 export default function Account() {
-  const user = useAssertUser();
+  const currentUser = useAssertCurrentUser();
   const { id } = useParams();
-  const refreshUser = useRefreshUser();
+  const refreshUser = useRefetchUser();
   const navigate = useNavigate();
   const [account, setAccount] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    username: user?.username || "",
+    _id: "",
+    name: currentUser?.name || "",
+    email: currentUser?.email || "",
+    username: currentUser?.username || "",
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -35,18 +36,14 @@ export default function Account() {
     variant: "danger",
   });
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
-  const refreshOnUnauthorized = useRefreshOnUnauthorized();
+  const refetchOnUnauthorized = useRefetchOnUnauthorized();
 
   useEffect(() => {
-    setAccount((account) => {
-      return {
-        ...account,
-        name: user?.name || "",
-        email: user?.email || "",
-        username: user?.username || "",
-      };
-    });
-  }, [user]);
+    if (currentUser) {
+      setAccount((account) => ({ ...account, ...currentUser }));
+    }
+  }, [currentUser]);
+  console.log(account);
 
   const showPasswordError =
     account.newPassword &&
@@ -55,14 +52,14 @@ export default function Account() {
   const updateProfile = async () => {
     setProfileAlert({ message: "", variant: "" });
     try {
-      await client.updateProfile(account);
+      await usersClient.updateUserInformation(account);
       await refreshUser();
       setProfileAlert({
         message: "Profile updated successfully",
         variant: "success",
       });
     } catch (error) {
-      refreshOnUnauthorized(error);
+      refetchOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setProfileAlert({
           message: error.response.data,
@@ -81,14 +78,15 @@ export default function Account() {
       return;
     }
     try {
-      await client.updatePassword(account);
+      if (!currentUser) return;
+      await usersClient.updateUserPassword(currentUser._id, account);
       setPasswordAlert({
         message: "Password updated",
         variant: "success",
       });
       await refreshUser();
     } catch (error) {
-      refreshOnUnauthorized(error);
+      refetchOnUnauthorized(error);
       if (isAxiosError(error) && error.response?.status === 400) {
         setPasswordAlert({
           message: error.response.data,
@@ -98,16 +96,18 @@ export default function Account() {
     }
   };
   const deleteAccount = async () => {
+    if (!currentUser) return;
     try {
-      await client.deleteProfile();
+      await usersClient.deleteUser(currentUser._id);
       await refreshUser();
       navigate("/login", { replace: true });
     } catch (error) {
-      refreshOnUnauthorized(error);
+      refetchOnUnauthorized(error);
+      console.log(error);
     }
   };
 
-  if (id !== user?._id) {
+  if (id !== currentUser?._id) {
     return <div></div>;
   }
 
@@ -162,7 +162,7 @@ export default function Account() {
           <input
             className="form-control"
             disabled={true}
-            value={user?.role === "user" ? "User" : "Editor"}
+            value={currentUser?.role === "user" ? "User" : "Editor"}
           />
         </label>
       </div>
@@ -268,7 +268,10 @@ export default function Account() {
           <Modal.Header closeButton>
             <Modal.Title>Are you sure?</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Deleting your account cannot be undone.</Modal.Body>
+          <Modal.Body>
+            Deleting your account will delete all of your data. This cannot be
+            undone.{" "}
+          </Modal.Body>
           <Modal.Footer>
             <button
               className="btn btn-secondary"

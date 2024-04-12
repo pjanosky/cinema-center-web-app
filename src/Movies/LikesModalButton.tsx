@@ -1,8 +1,9 @@
 import { Modal } from "react-bootstrap";
-import UserList from "../Profile/Followers/userList";
-import { Review, User } from "../types";
+import UserList from "../Profile/Followers/UserList";
 import { useCallback, useEffect, useState } from "react";
-import * as client from "./client";
+import { User } from "../API/Users/types";
+import { Review } from "../API/Reviews/types";
+import usersClient from "../API/Users/client";
 
 export default function LikesModalButton({
   review,
@@ -16,7 +17,7 @@ export default function LikesModalButton({
 
   const fetchUsers = useCallback(async () => {
     try {
-      const users = await client.getLikesForReview(review._id);
+      const users = await usersClient.getUsersWhoLikedReview(review._id);
       setUsers(users);
     } catch (error) {
       console.log(error);
@@ -45,7 +46,15 @@ export default function LikesModalButton({
             {review.likes.length} Like{review.likes.length === 1 ? "" : "s"}
           </Modal.Title>
         </Modal.Header>
-        <UserList users={users} />
+        <div
+          style={{
+            maxHeight: "calc(100vh - 150px)",
+            overflowY: "auto",
+            borderRadius: "20px",
+          }}
+        >
+          <UserList users={users} />
+        </div>
       </Modal>
     </>
   );

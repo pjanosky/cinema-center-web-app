@@ -1,9 +1,8 @@
-import { User } from "../../types";
-import React from "react";
 import { Link } from "react-router-dom";
-import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faUser } from "@fortawesome/free-solid-svg-icons";
+import { User } from "../../API/Users/types";
+import "./index.css";
 
 export default function UserList({ users }: { users: User[] }) {
   return (

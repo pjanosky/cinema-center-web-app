@@ -1,30 +1,4 @@
-export type ListEntry = {
-  movieId: string;
-  description: string;
-};
-
-export type List = {
-  _id: string;
-  date: string;
-  userId: string;
-  title: string;
-  description: string | undefined;
-  movies: ListEntry[];
-};
-
-export type Rating = 1 | 2 | 3 | 4 | 5;
-export type Review = {
-  _id: string;
-  date: string;
-  rating: Rating;
-  title: string;
-  content: string;
-  userId: string;
-  movieId: string;
-  likes: string[];
-};
-
-export type Movie = {
+export type MovieResult = {
   adult?: boolean;
   backdrop_path?: string | null;
   genre_ids?: string[];
@@ -42,21 +16,21 @@ export type Movie = {
 };
 
 export type CastMember = {
-  adult?: boolean;
-  gender?: number;
+  adult: boolean;
+  gender: number;
   id: number;
-  known_for_department?: string;
+  known_for_department: string;
   name: string;
-  original_name?: string;
-  popularity?: number;
-  profile_path?: string;
-  cast_id?: string;
-  character?: string;
-  credit_id?: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  cast_id: string;
+  character: string;
+  credit_id: string;
   order: number;
 };
 
-export type MovieDetails = {
+export type Movie = {
   adult?: boolean;
   backdrop_path?: string;
   belongs_to_collection?: {
@@ -101,9 +75,7 @@ export type MovieDetails = {
   video?: false;
   vote_average?: number;
   vote_count?: number;
-  similar: Movie[];
+  similar: MovieResult[];
   cast: CastMember[];
   stars: number | undefined;
 };
-
-export type User = {};

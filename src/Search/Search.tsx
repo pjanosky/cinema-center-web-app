@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, InputGroup } from "react-bootstrap";
-import * as client from "./client";
-import UserList from "../Profile/Followers/userList";
-import MoviesList from "./moviesList";
-import { Movie, User } from "../types";
+import UserList from "../Profile/Followers/UserList";
+import MoviesList from "./MoviesList";
 import { useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { MovieResult } from "../API/Movies/types";
+import { User } from "../API/Users/types";
+import usersClient from "../API/Users/client";
+import moviesClient from "../API/Movies/client";
+import { InputGroup } from "react-bootstrap";
 
 function useIndependentSearchParam(
   name: string
@@ -30,7 +32,7 @@ export default function Search() {
   const [query, setQuery] = useIndependentSearchParam("query");
   const [queryInput, setQueryInput] = useState(query || "");
   const [results, setResults] = useState({
-    movies: [] as Movie[],
+    movies: [] as MovieResult[],
     users: [] as User[],
   });
 
@@ -42,12 +44,12 @@ export default function Search() {
       setMode(mode);
       switch (mode) {
         case "users":
-          const userResults = await client.searchUsers(query);
-          setResults((results) => ({ users: userResults, movies: [] }));
+          const userResults = await usersClient.searchUsers(query);
+          setResults((results) => ({ ...results, users: userResults }));
           break;
         case "movies":
-          const movieResults = await client.searchMovies(query);
-          setResults((results) => ({ movies: movieResults, users: [] }));
+          const movieResults = await moviesClient.searchMovies(query);
+          setResults((results) => ({ ...results, movies: movieResults }));
           break;
       }
     } catch (error) {
@@ -73,14 +75,17 @@ export default function Search() {
         </select>
         <input
           className="form-control"
-          placeholder="Search for a movie or user"
+          placeholder="Search..."
           value={queryInput}
           onChange={(e) => setQueryInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && setQuery(queryInput)}
         />
-        <Button onClick={() => setQuery(queryInput)}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setQuery(queryInput)}
+        >
           <FontAwesomeIcon icon={faSearch} />
-        </Button>
+        </button>
       </InputGroup>
       {query && <h2>Results</h2>}
 

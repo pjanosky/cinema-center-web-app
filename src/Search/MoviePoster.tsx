@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Poster({
+export default function MoviePoster({
   size,
   path,
   showPlaceholder = true,
