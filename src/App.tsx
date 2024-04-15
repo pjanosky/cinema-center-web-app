@@ -1,24 +1,19 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router";
+import { HashRouter } from "react-router-dom";
 import Login from "./Account/Login/Login";
-import Register from "./Account/Register/Register";
-import Home from "./Home/Home";
-import Profile from "./Profile/Profile";
-import Search from "./Search/Search";
-import MovieDetails from "./Movies/MovieDetails";
-import Navigation from "./Navigation/Navigation";
 import { useQueryCurrentUser } from "./Account/hooks";
+import Home from "./Home/Home";
 import ListDetails from "./List/ListDetails";
+import MovieDetails from "./Movies/MovieDetails";
+import Profile from "./Profile/Profile";
+import Navigation from "./Navigation/Navigation";
+import Register from "./Account/Register/Register";
+import Search from "./Search/Search";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navigation>
         <Routes>
           <Route path="" element={<Navigate to="/home" replace={true} />} />
@@ -32,7 +27,7 @@ function App() {
           <Route path="lists/:id/*" element={<ListDetails />} />
         </Routes>
       </Navigation>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

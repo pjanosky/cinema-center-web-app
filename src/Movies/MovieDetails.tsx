@@ -1,10 +1,9 @@
 import { useParams } from "react-router";
 import { useCallback, useEffect, useState } from "react";
-import MoviesList from "../Search/MoviesList";
 import ReviewsList from "./ReviewsList";
 import { useRefetchOnUnauthorized, useCurrentUser } from "../Account/hooks";
 import { isAxiosError } from "axios";
-import { IfEditor, IfNotEditor, IfUser } from "../Account/components";
+import { IfEditor, IfNotEditor, IfUser } from "../Account/Components";
 import ListList from "../List/ListList";
 import moviesClient from "../API/Movies/client";
 import reviewsClient from "../API/Reviews/client";
@@ -14,7 +13,8 @@ import { Movie } from "../API/Movies/types";
 import { Review } from "../API/Reviews/types";
 import RatingStars from "./RatingStars";
 import ReviewEditor from "./ReviewEditor";
-import MoviePoster from "../Search/MoviePoster";
+import MoviePoster from "./MoviePoster";
+import MoviesList from "./MoviesList";
 
 export default function MovieDetails() {
   const { id: movieId } = useParams();

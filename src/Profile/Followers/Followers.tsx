@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import UserList from "./UserList";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
-import { User } from "../../API/Users/types";
 import usersClient from "../../API/Users/client";
+import { User } from "../../API/Users/types";
+import UserList from "../../Users/UserList";
 
 export default function Followers() {
   const { id } = useParams();

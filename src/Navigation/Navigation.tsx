@@ -1,10 +1,9 @@
-import "./index.css";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import NavigationLinks from "./NavigationLinks";
 import "./index.css";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navigation({
   children,

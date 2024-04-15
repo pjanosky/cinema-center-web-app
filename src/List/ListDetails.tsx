@@ -1,15 +1,15 @@
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
-import ListEditor from "./ListEditor";
-import { IfMatchingUser } from "../Account/components";
-import { List } from "../API/Lists/types";
+import { Link } from "react-router-dom";
 import listsClient from "../API/Lists/client";
+import { List } from "../API/Lists/types";
 import usersClient from "../API/Users/client";
 import { User } from "../API/Users/types";
-import { Link } from "react-router-dom";
+import { IfMatchingUser } from "../Account/Components";
 import EntryList from "./EntryList";
-import { useCallback, useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import ListEditor from "./ListEditor";
 
 export default function ListDetails() {
   const { id } = useParams();

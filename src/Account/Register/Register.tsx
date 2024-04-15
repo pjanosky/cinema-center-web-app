@@ -1,13 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { isAxiosError } from "axios";
-import { Alert, Form, InputGroup } from "react-bootstrap";
-import "./index.css";
-import { useSearchParams } from "react-router-dom";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { NewUser, Role } from "../../API/Users/types";
+import { isAxiosError } from "axios";
+import { useState } from "react";
+import { InputGroup, Alert, Form } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import usersClient from "../../API/Users/client";
+import { NewUser, Role } from "../../API/Users/types";
 import { useRefetchUser } from "../hooks";
 
 export default function Register() {
@@ -61,7 +60,7 @@ export default function Register() {
       <div className="p-4" style={{ maxWidth: "500px" }}>
         <h1>Register</h1>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Name
             <input
               type="text"
@@ -76,7 +75,7 @@ export default function Register() {
           </label>
         </div>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Email
             <input
               type="email"
@@ -90,7 +89,7 @@ export default function Register() {
           </label>
         </div>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Username
             <input
               type="text"
@@ -106,7 +105,7 @@ export default function Register() {
           </label>
         </div>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Password
             <InputGroup>
               <input
@@ -128,7 +127,7 @@ export default function Register() {
           </label>
         </div>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Confirm Password
             <InputGroup>
               <input
@@ -156,7 +155,7 @@ export default function Register() {
           </label>
         </div>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Role
             <Form.Select
               aria-label="Default select example"

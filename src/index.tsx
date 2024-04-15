@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
 
 // Configure axios defaults
 axios.defaults.baseURL =

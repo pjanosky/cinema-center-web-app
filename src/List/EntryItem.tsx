@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { IfMatchingUser, IfUser } from "../Account/components";
-import RatingStars from "../Movies/RatingStars";
-import { List, ListEntry } from "../API/Lists/types";
+import listsClient from "../API/Lists/client";
+import { ListEntry, List } from "../API/Lists/types";
 import moviesClient from "../API/Movies/client";
 import { Movie } from "../API/Movies/types";
-import listsClient from "../API/Lists/client";
-import { useCurrentUser, useRefetchOnUnauthorized } from "../Account/hooks";
-import MoviePoster from "../Search/MoviePoster";
+import { IfUser, IfMatchingUser } from "../Account/Components";
+import { useRefetchOnUnauthorized, useCurrentUser } from "../Account/hooks";
+import MoviePoster from "../Movies/MoviePoster";
+import RatingStars from "../Movies/RatingStars";
 
 export default function EntryItem({
   entry,
@@ -116,17 +116,31 @@ export default function EntryItem({
         </div>
         <IfMatchingUser userId={list.userId}>
           <div className="d-flex gap-2 mt-2">
-            <button
-              className={`btn btn-${editingEntry ? "primary" : "secondary"}`}
-              onClick={() =>
-                editingEntry ? updateEntry() : setEditingEntry(entry)
-              }
-            >
-              {editingEntry ? "Save" : "Edit description"}
-            </button>
-            <button className="btn btn-danger" onClick={removeEntry}>
-              Remove
-            </button>
+            {editingEntry ? (
+              <>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setEditingEntry(undefined)}
+                >
+                  Cancel
+                </button>
+                <button className="btn btn-primary" onClick={updateEntry}>
+                  Save
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setEditingEntry(entry)}
+                >
+                  Edit description
+                </button>
+                <button className="btn btn-danger" onClick={removeEntry}>
+                  Remove
+                </button>
+              </>
+            )}
           </div>
         </IfMatchingUser>
       </div>

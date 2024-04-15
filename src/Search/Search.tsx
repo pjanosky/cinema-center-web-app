@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import UserList from "../Profile/Followers/UserList";
-import MoviesList from "./MoviesList";
-import { useSearchParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { MovieResult } from "../API/Movies/types";
-import { User } from "../API/Users/types";
-import usersClient from "../API/Users/client";
-import moviesClient from "../API/Movies/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useState, useEffect } from "react";
 import { InputGroup } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
+import moviesClient from "../API/Movies/client";
+import { MovieResult } from "../API/Movies/types";
+import usersClient from "../API/Users/client";
+import { User } from "../API/Users/types";
+import MoviesList from "../Movies/MoviesList";
+import UserList from "../Users/UserList";
 
 function useIndependentSearchParam(
   name: string

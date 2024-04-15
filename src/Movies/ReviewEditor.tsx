@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { Rating, Review } from "../API/Reviews/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Review, Rating } from "../API/Reviews/types";
 
 export default function ReviewEditor({
   review,

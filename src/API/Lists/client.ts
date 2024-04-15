@@ -1,5 +1,5 @@
 import axios from "axios";
-import { List, ListEntry, NewList, UpdateList } from "./types";
+import { List, NewList, UpdateList, ListEntry } from "./types";
 
 async function getListById(listId: string): Promise<List> {
   const response = await axios.get(`/lists/${listId}`);

@@ -1,9 +1,9 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 import { List } from "../API/Lists/types";
 import { useCurrentUser } from "../Account/hooks";
 import ListItem from "./ListItem";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 
 export default function ListList({
   lists,

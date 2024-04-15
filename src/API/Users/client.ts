@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NewUser, UpdateUser, User } from "./types";
+import { User, NewUser, UpdateUser } from "./types";
 
 async function getCurrentUser(): Promise<User> {
   const response = await axios.get("/users/current");

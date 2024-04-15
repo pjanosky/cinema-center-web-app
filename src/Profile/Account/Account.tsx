@@ -9,7 +9,6 @@ import {
 import { useNavigate, useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import "./index.css";
 import usersClient from "../../API/Users/client";
 
 export default function Account() {
@@ -115,7 +114,7 @@ export default function Account() {
       <h2>Account</h2>
       <h3>Information</h3>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           Name
           <input
             type="text"
@@ -128,7 +127,7 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           Email
           <input
             type="email"
@@ -140,7 +139,7 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           Username
           <input
             type="text"
@@ -156,7 +155,7 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           Role
           <input
             className="form-control"
@@ -175,7 +174,7 @@ export default function Account() {
       )}
       <h3 className="pt-4">Password</h3>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           Old Password
           <InputGroup>
             <input
@@ -197,7 +196,7 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           New Password
           <InputGroup>
             <input
@@ -219,7 +218,7 @@ export default function Account() {
         </label>
       </div>
       <div className="mb-3">
-        <label>
+        <label className="w-100">
           Confirm Password
           <InputGroup>
             <input
@@ -269,7 +268,7 @@ export default function Account() {
           </Modal.Header>
           <Modal.Body>
             Deleting your account will delete all of your data. This cannot be
-            undone.{" "}
+            undone.
           </Modal.Body>
           <Modal.Footer>
             <button

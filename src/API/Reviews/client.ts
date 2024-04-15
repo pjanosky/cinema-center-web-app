@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NewReview, Review, UpdateReview } from "./types";
+import { Review, NewReview, UpdateReview } from "./types";
 
 async function getReviewsByUser(userId: string): Promise<Review[]> {
   const response = await axios.get(`/reviews?userId=${userId}`);

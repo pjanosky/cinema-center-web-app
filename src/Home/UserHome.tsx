@@ -3,8 +3,8 @@ import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import reviewsClient from "../API/Reviews/client";
 import { Review } from "../API/Reviews/types";
-import ListList from "../List/ListList";
 import { useCurrentUser } from "../Account/hooks";
+import ListList from "../List/ListList";
 import ReviewsList from "../Movies/ReviewsList";
 
 export default function UserHome() {

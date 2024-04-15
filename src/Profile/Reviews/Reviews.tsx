@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useParams } from "react-router";
+import reviewsClient from "../../API/Reviews/client";
+import { Review } from "../../API/Reviews/types";
 import { useRefetchOnUnauthorized } from "../../Account/hooks";
 import ReviewsList from "../../Movies/ReviewsList";
-import { useParams } from "react-router";
-import { Review } from "../../API/Reviews/types";
-import reviewsClient from "../../API/Reviews/client";
 
 export default function Reviews() {
   const { id } = useParams();

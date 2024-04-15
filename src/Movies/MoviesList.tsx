@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import "./index.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 import { MovieResult } from "../API/Movies/types";
 import MoviePoster from "./MoviePoster";
 

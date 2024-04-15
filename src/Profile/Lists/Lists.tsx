@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import ListList from "../../List/ListList";
 import { isAxiosError } from "axios";
-import { List, NewList } from "../../API/Lists/types";
-import listsClient from "../../API/Lists/client";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
-import { IfMatchingUser } from "../../Account/components";
+import listsClient from "../../API/Lists/client";
+import { List, NewList } from "../../API/Lists/types";
+import { IfMatchingUser } from "../../Account/Components";
+import ListList from "../../List/ListList";
 
 export default function Lists() {
   const { id } = useParams();

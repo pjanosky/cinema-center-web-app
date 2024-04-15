@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
-import ReviewsList from "../../Movies/ReviewsList";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
-import { Review } from "../../API/Reviews/types";
 import reviewsClient from "../../API/Reviews/client";
+import { Review } from "../../API/Reviews/types";
+import ReviewsList from "../../Movies/ReviewsList";
 
 export default function Likes() {
   const { id } = useParams();

@@ -1,8 +1,9 @@
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { DropdownButton, Dropdown } from "react-bootstrap";
+import { useLocation, useParams, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { User } from "../../API/Users/types";
 import { useCurrentUser } from "../../Account/hooks";
 import "./index.css";
-import { User } from "../../API/Users/types";
-import { Dropdown, DropdownButton } from "react-bootstrap";
 
 export default function ProfileNavigation({
   user,

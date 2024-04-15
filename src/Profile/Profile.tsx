@@ -1,15 +1,15 @@
-import ProfileNavigation from "./Navigation/ProfileNavigation";
-import { Navigate, Route, Routes, useParams } from "react-router";
+import { useState, useCallback, useEffect } from "react";
+import { useParams, Routes, Route, Navigate } from "react-router";
+import usersClient from "../API/Users/client";
+import { User } from "../API/Users/types";
+import { useCurrentUser, useRefetchUser } from "../Account/hooks";
 import Account from "./Account/Account";
-import Reviews from "./Reviews/Reviews";
 import Followers from "./Followers/Followers";
 import Following from "./Followers/Following";
-import { useRefetchUser, useCurrentUser } from "../Account/hooks";
-import Lists from "./Lists/Lists";
 import Likes from "./Likes/Likes";
-import usersClient from "../API/Users/client";
-import { useCallback, useEffect, useState } from "react";
-import { User } from "../API/Users/types";
+import Lists from "./Lists/Lists";
+import ProfileNavigation from "./Navigation/ProfileNavigation";
+import Reviews from "./Reviews/Reviews";
 
 export default function Profile() {
   const { id } = useParams();
@@ -62,7 +62,7 @@ export default function Profile() {
         )}
       </div>
       <h5>
-        <span>@{user?.username || ""}</span>{" "}
+        <span>@{user?.username || ""}</span>
         <span style={{ color: "gray" }}>
           {" - "}
           {user?.role === "editor" ? "Editor" : "Watcher"}

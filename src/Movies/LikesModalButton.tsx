@@ -1,9 +1,9 @@
+import { useState, useCallback, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import UserList from "../Profile/Followers/UserList";
-import { useCallback, useEffect, useState } from "react";
-import { User } from "../API/Users/types";
 import { Review } from "../API/Reviews/types";
 import usersClient from "../API/Users/client";
+import { User } from "../API/Users/types";
+import UserList from "../Users/UserList";
 
 export default function LikesModalButton({
   review,

@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import { IfMatchingUser } from "../Account/components";
-import { List } from "../API/Lists/types";
-import listsClient from "../API/Lists/client";
 import { useState } from "react";
-import ListEditor from "./ListEditor";
+import { Link } from "react-router-dom";
+import listsClient from "../API/Lists/client";
+import { List } from "../API/Lists/types";
+import { IfMatchingUser } from "../Account/Components";
 import { useRefetchOnUnauthorized } from "../Account/hooks";
+import ListEditor from "./ListEditor";
 
 export default function ListItem({
   list,

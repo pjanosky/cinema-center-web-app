@@ -1,22 +1,17 @@
 import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import { IfAuthenticated, IfUnauthenticated } from "../Account/components";
-import { useCurrentUser, useRefetchUser } from "../Account/hooks";
-import "./index.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
   faHome,
-  faRightFromBracket,
-  faRightToBracket,
   faSearch,
   faUser,
+  faRightFromBracket,
+  faRightToBracket,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate, useLocation } from "react-router";
+import { useSearchParams, Link } from "react-router-dom";
 import usersClient from "../API/Users/client";
+import { IfAuthenticated, IfUnauthenticated } from "../Account/Components";
+import { useCurrentUser, useRefetchUser } from "../Account/hooks";
 
 export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
   const currentUser = useCurrentUser();

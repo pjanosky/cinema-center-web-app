@@ -1,20 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
-import { useCurrentUser } from "../Account/hooks";
-import { Link } from "react-router-dom";
-import "./index.css";
-import { IfMatchingUser, IfUser } from "../Account/components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
+import { useState, useCallback, useEffect } from "react";
+import { Link } from "react-router-dom";
 import moviesClient from "../API/Movies/client";
-import { Review } from "../API/Reviews/types";
-import { User } from "../API/Users/types";
 import { Movie } from "../API/Movies/types";
 import reviewsClient from "../API/Reviews/client";
+import { Review } from "../API/Reviews/types";
 import usersClient from "../API/Users/client";
-import RatingStars from "./RatingStars";
+import { User } from "../API/Users/types";
+import { IfUser, IfMatchingUser } from "../Account/Components";
+import { useCurrentUser } from "../Account/hooks";
 import LikesModalButton from "./LikesModalButton";
-import MoviePoster from "../Search/MoviePoster";
+import RatingStars from "./RatingStars";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
 export default function ReviewItem({
   review,
@@ -93,8 +91,13 @@ export default function ReviewItem({
         <IfUser>
           <button
             onClick={toggleLike}
-            style={{ fontSize: "1.5em", color: "var(--accent-color)" }}
-            className={"btn btn-tertiary px-0 py-0 cc-like-btn"}
+            style={{
+              fontSize: "1.5em",
+              color: "var(--accent-color)",
+              backgroundColor: "transparent",
+              border: "none",
+            }}
+            className={"btn btn-tertiary px-0 py-0 cc-link"}
           >
             {liked ? (
               <FontAwesomeIcon icon={faHeartSolid} />

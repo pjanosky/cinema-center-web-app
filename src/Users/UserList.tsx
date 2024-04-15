@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
+import { faUser, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faUser } from "@fortawesome/free-solid-svg-icons";
-import { User } from "../../API/Users/types";
-import "./index.css";
+import { Link } from "react-router-dom";
+import { User } from "../API/Users/types";
 
 export default function UserList({ users }: { users: User[] }) {
   return (
@@ -23,6 +22,7 @@ export default function UserList({ users }: { users: User[] }) {
                     style={{
                       margin: "0.4em",
                       fontSize: "1.5em",
+                      color: "gray",
                       aspectRatio: 1,
                     }}
                   />
@@ -32,7 +32,10 @@ export default function UserList({ users }: { users: User[] }) {
                   <br />
                   <span style={{ color: "gray" }}>@{user.username}</span>
                 </div>
-                <FontAwesomeIcon icon={faChevronRight} />
+                <FontAwesomeIcon
+                  icon={faChevronRight}
+                  style={{ color: "lightgray" }}
+                />
               </div>
             </Link>
           </li>

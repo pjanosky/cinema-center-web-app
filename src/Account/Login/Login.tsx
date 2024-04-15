@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useRefetchUser } from "../hooks";
-import { useSearchParams } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./index.css";
-import usersClient from "../../API/Users/client";
+import { useState } from "react";
 import { InputGroup } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import { useSearchParams } from "react-router-dom";
+import usersClient from "../../API/Users/client";
+import { useRefetchUser } from "../hooks";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,7 +18,7 @@ export default function Login() {
 
   const redirect = searchParams.get("redirect");
   const redirectParams = Array.from(searchParams.entries())
-    .filter(([key, value]) => key !== "redirect")
+    .filter(([key]) => key !== "redirect")
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
 
@@ -43,7 +42,7 @@ export default function Login() {
       <div className="p-4" style={{ maxWidth: "500px" }}>
         <h1>Login</h1>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Username
             <input
               type="text"
@@ -58,7 +57,7 @@ export default function Login() {
           </label>
         </div>
         <div className="mb-3">
-          <label>
+          <label className="w-100">
             Password
             <InputGroup>
               <input
