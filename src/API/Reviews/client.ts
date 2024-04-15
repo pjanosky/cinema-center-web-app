@@ -13,6 +13,14 @@ async function getReviewsByMovie(movieId: string): Promise<Review[]> {
   const response = await axios.get(`/reviews?movieId=${movieId}`);
   return response.data;
 }
+async function getFollowerReviews(userId: string): Promise<Review[]> {
+  const response = await axios.get(`/reviews?followedBy=${userId}`);
+  return response.data;
+}
+async function getRecentReviews(limit: number = 10): Promise<Review[]> {
+  const response = await axios.get(`/reviews?sort=date&limit=${limit}`);
+  return response.data;
+}
 async function createReview(review: NewReview): Promise<Review> {
   const response = await axios.post("/reviews", review);
   return response.data;
@@ -37,10 +45,12 @@ const reviewsClient = {
   getReviewsByUser,
   getReviewsLikedByUser,
   getReviewsByMovie,
+  getRecentReviews,
   createReview,
   updateReview,
   deleteReview,
   likeReview,
   unlikeReview,
+  getFollowerReviews,
 };
 export default reviewsClient;

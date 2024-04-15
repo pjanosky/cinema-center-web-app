@@ -21,8 +21,13 @@ a {
   color: black !important;
 }
 
-a.cc-link:hover {
+.cc-link:hover {
   color: var(--accent-color) !important;
+}
+
+.cc-link-accent {
+  color: var(--accent-color) !important;
+  text-decoration-line: underline !important;
 }
 
 .btn-primary,

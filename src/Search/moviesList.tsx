@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import "./index.css";
-import Poster from "./MoviePoster";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { MovieResult } from "../API/Movies/types";
+import MoviePoster from "./MoviePoster";
 
 export default function MoviesList({ movies }: { movies: MovieResult[] }) {
   return (
@@ -20,7 +20,7 @@ export default function MoviesList({ movies }: { movies: MovieResult[] }) {
                   className="flex-shrink-0"
                   style={{ width: "92px", height: "138px" }}
                 >
-                  <Poster size="w92" path={movie.poster_path} />
+                  <MoviePoster size="w92" path={movie.poster_path} />
                 </div>
                 <div className="flex-grow-1 flex-shrink-1">
                   <span style={{ color: "black" }}>

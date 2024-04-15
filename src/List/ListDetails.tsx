@@ -18,6 +18,11 @@ export default function ListDetails() {
   const [editingList, setEditingList] = useState<List | undefined>();
   const [user, setUser] = useState<User | undefined>();
 
+  const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    dateStyle: "short",
+  });
+  const date = list && dateFormatter.format(new Date(list.date));
+
   const fetchList = useCallback(async () => {
     if (!id) return;
     try {
@@ -59,14 +64,20 @@ export default function ListDetails() {
         <div className="d-flex">
           <div className="flex-shrink-1 flex-grow-1">
             <h1>{list?.title || ""}</h1>
-            <div className="mb-3">{list && list.description}</div>
+            <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
+              {list && list.description}
+            </div>
             <div className="mb-3">
-              <Link to={`/profile/${list?.userId}`} className="cc-link">
-                <div className="d-flex align-items-center gap-2">
-                  <FontAwesomeIcon icon={faUser} />
-                  <div>Curated by {user && user.name}</div>
-                </div>
+              <FontAwesomeIcon icon={faUser} />
+              <span> Created by </span>
+              <Link
+                to={`/profile/${list?.userId}`}
+                className="cc-link p-0 m-0"
+                style={{ textDecorationLine: "underline important" }}
+              >
+                {user && user.name}
               </Link>
+              <span> on {date}</span>
             </div>
           </div>
           <IfMatchingUser userId={list?.userId || ""}>

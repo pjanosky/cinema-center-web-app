@@ -14,6 +14,7 @@ import {
   faRightToBracket,
   faSearch,
   faUser,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import usersClient from "../API/Users/client";
 
@@ -27,9 +28,12 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
   const redirectParams = Array.from(searchParams.entries())
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
-  const redirect = `redirect=${encodeURIComponent(
-    pathname.slice(1)
-  )}&${redirectParams}`;
+  const currentPage = pathname.split("/")[1].toLowerCase();
+  const redirectablePages = ["profile", "search", "details", "lists", "home"];
+  const canRedirect = redirectablePages.includes(currentPage);
+  const redirect = canRedirect
+    ? `redirect=${encodeURIComponent(pathname.slice(1))}&${redirectParams}`
+    : "";
 
   const logout = async () => {
     onClick && onClick();
@@ -93,7 +97,7 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
           </li>
           <li>
             <Link onClick={onClick} to={`/register?${redirect}`}>
-              <FontAwesomeIcon icon={faUser} />
+              <FontAwesomeIcon icon={faUserPlus} />
               Register
             </Link>
           </li>

@@ -22,7 +22,7 @@ export default function EntryList({
               <EntryItem entry={entry} list={list} setList={setList} />
             ) : (
               <Link to={`/details/${entry.movieId}`}>
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center gap-2">
                   <div className="flex-grow-1 flex-shrink-1">
                     <EntryItem entry={entry} list={list} setList={setList} />
                   </div>

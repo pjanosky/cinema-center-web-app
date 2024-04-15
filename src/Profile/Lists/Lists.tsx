@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import ListsList from "../../List/ListsList";
+import ListList from "../../List/ListList";
 import { isAxiosError } from "axios";
 import { List, NewList } from "../../API/Lists/types";
 import listsClient from "../../API/Lists/client";
@@ -90,7 +90,7 @@ export default function Lists() {
       </IfMatchingUser>
       <div>
         <h3>Existing Lists</h3>
-        <ListsList lists={lists} setLists={setLists} />
+        <ListList lists={lists} setLists={setLists} />
       </div>
     </div>
   );

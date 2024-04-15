@@ -43,7 +43,6 @@ export default function Account() {
       setAccount((account) => ({ ...account, ...currentUser }));
     }
   }, [currentUser]);
-  console.log(account);
 
   const showPasswordError =
     account.newPassword &&

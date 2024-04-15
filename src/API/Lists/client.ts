@@ -13,6 +13,10 @@ async function getListsByMovie(movieId: string): Promise<List[]> {
   const response = await axios.get(`/lists?movieId=${movieId}`);
   return response.data;
 }
+async function getRecentLists(limit: number = 5): Promise<List[]> {
+  const response = await axios.get(`/lists?sort=date&limit=${limit}`);
+  return response.data;
+}
 async function createList(info: NewList): Promise<List> {
   const response = await axios.post("/lists", info);
   return response.data;
@@ -49,6 +53,7 @@ const listsClient = {
   getListById,
   getListsByUser,
   getListsByMovie,
+  getRecentLists,
   createList,
   updateList,
   deleteList,

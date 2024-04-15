@@ -165,7 +165,7 @@ export default function Register() {
                 setUser((user) => ({ ...user, role: e.target.value as Role }))
               }
             >
-              <option value="user">User</option>
+              <option value="user">Watcher</option>
               <option value="editor">Editor</option>
             </Form.Select>
           </label>

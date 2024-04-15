@@ -1,12 +1,11 @@
 import { useParams } from "react-router";
 import { useCallback, useEffect, useState } from "react";
-import Poster from "../Search/MoviePoster";
 import MoviesList from "../Search/MoviesList";
 import ReviewsList from "./ReviewsList";
 import { useRefetchOnUnauthorized, useCurrentUser } from "../Account/hooks";
 import { isAxiosError } from "axios";
 import { IfEditor, IfNotEditor, IfUser } from "../Account/components";
-import ListsList from "../List/ListsList";
+import ListList from "../List/ListList";
 import moviesClient from "../API/Movies/client";
 import reviewsClient from "../API/Reviews/client";
 import listsClient from "../API/Lists/client";
@@ -15,6 +14,7 @@ import { Movie } from "../API/Movies/types";
 import { Review } from "../API/Reviews/types";
 import RatingStars from "./RatingStars";
 import ReviewEditor from "./ReviewEditor";
+import MoviePoster from "../Search/MoviePoster";
 
 export default function MovieDetails() {
   const { id: movieId } = useParams();
@@ -42,7 +42,7 @@ export default function MovieDetails() {
     reviews.find((review) => review.userId === currentUser?._id) !== undefined;
   const ratingAverage =
     reviews.length > 0
-      ? reviews.reduce((total, review) => total + review.rating, 0) /
+      ? reviews.reduce((total, review) => total + review.rating, 0.0) /
         reviews.length
       : -1;
   const unaddedUserLists = userLists.filter(
@@ -137,11 +137,14 @@ export default function MovieDetails() {
     try {
       const lists = await listsClient.getListsByUser(currentUser._id);
       setUserLists(lists);
-      setSelectedListId(lists[0]?._id || "");
+      const unaddedUserLists = lists.filter(
+        (list) => !list.entries.find((entry) => entry.movieId === movieId)
+      );
+      setSelectedListId(unaddedUserLists[0]?._id || "");
     } catch (error) {
       console.log(error);
     }
-  }, [currentUser]);
+  }, [currentUser, movieId]);
   const fetchMovieLists = useCallback(async () => {
     if (!movieId) return;
     try {
@@ -181,7 +184,7 @@ export default function MovieDetails() {
     <div>
       <div className="w-100 mb-4">
         {details?.backdrop_path && (
-          <Poster
+          <MoviePoster
             size="w1280"
             path={details.backdrop_path}
             showPlaceholder={false}
@@ -236,7 +239,7 @@ export default function MovieDetails() {
                   <div
                     style={{ width: "100px", height: "150px", margin: "auto" }}
                   >
-                    <Poster size="w185" path={member.profile_path}></Poster>
+                    <MoviePoster size="w185" path={member.profile_path} />
                   </div>
                 </div>
                 {member.name}
@@ -314,11 +317,11 @@ export default function MovieDetails() {
         {movieLists.length > 0 && (
           <div className="mb-3">
             <h2>Lists with this movie</h2>
-            <ListsList
+            <ListList
               lists={movieLists}
               setLists={setMovieLists}
               movieId={movieId}
-            ></ListsList>
+            ></ListList>
           </div>
         )}
       </IfEditor>
@@ -338,11 +341,11 @@ export default function MovieDetails() {
         {movieLists.length > 0 && (
           <div className="mb-3">
             <h2>Lists with this movie</h2>
-            <ListsList
+            <ListList
               lists={movieLists}
               setLists={setMovieLists}
               movieId={movieId}
-            ></ListsList>
+            ></ListList>
           </div>
         )}
       </IfNotEditor>

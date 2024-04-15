@@ -65,7 +65,7 @@ export default function Profile() {
         <span>@{user?.username || ""}</span>{" "}
         <span style={{ color: "gray" }}>
           {" - "}
-          {user?.role || ""}
+          {user?.role === "editor" ? "Editor" : "Watcher"}
         </span>
       </h5>
 

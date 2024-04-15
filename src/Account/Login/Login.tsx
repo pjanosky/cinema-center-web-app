@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useRefetchUser, useCurrentUser } from "../hooks";
+import { useRefetchUser } from "../hooks";
 import { useSearchParams } from "react-router-dom";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,6 @@ export default function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const refreshUser = useRefetchUser();
-  const user = useCurrentUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,20 +28,15 @@ export default function Login() {
     try {
       await usersClient.login(username, password);
       await refreshUser();
+      if (redirect) {
+        navigate(`/${redirect}?${redirectParams}`, { replace: true });
+      } else {
+        navigate("/home", { replace: true });
+      }
     } catch {
       setError("Invalid username or password");
     }
   };
-
-  useEffect(() => {
-    if (!user) return;
-    if (redirect) {
-      navigate(`/${redirect}?${redirectParams}`, { replace: true });
-    } else {
-      navigate("/home", { replace: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   return (
     <div className="cc-login">

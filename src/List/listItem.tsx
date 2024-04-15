@@ -10,10 +10,12 @@ export default function ListItem({
   list,
   setLists,
   movieId,
+  editable,
 }: {
   list: List;
   setLists: (setter: (lists: List[]) => List[]) => void;
   movieId?: string;
+  editable: boolean;
 }) {
   const [editingList, setEditingList] = useState<List | undefined>();
   const refetchOnUnauthorized = useRefetchOnUnauthorized();
@@ -60,33 +62,35 @@ export default function ListItem({
         {list.entries.length} Movie
         {list.entries.length === 1 ? "" : "s"}
       </div>
-      <IfMatchingUser userId={list.userId}>
-        <div className="mb-2 d-flex gap-2">
-          {movieId ? (
-            <button className="btn btn-danger" onClick={removeEntryFromList}>
-              Remove from list
-            </button>
-          ) : (
-            <>
-              <button
-                className="btn btn-primary"
-                onClick={() => setEditingList(list)}
-              >
-                Edit
+      {editable && (
+        <IfMatchingUser userId={list.userId}>
+          <div className="mb-2 d-flex gap-2">
+            {movieId ? (
+              <button className="btn btn-danger" onClick={removeEntryFromList}>
+                Remove from list
               </button>
-              <button className="btn btn-danger" onClick={deleteList}>
-                Delete
-              </button>
-            </>
-          )}
-          <Link
-            to={`/lists/${list._id}`}
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            <button className="btn btn-secondary">View Details</button>
-          </Link>
-        </div>
-      </IfMatchingUser>
+            ) : (
+              <>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setEditingList(list)}
+                >
+                  Edit
+                </button>
+                <button className="btn btn-danger" onClick={deleteList}>
+                  Delete
+                </button>
+              </>
+            )}
+            <Link
+              to={`/lists/${list._id}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <button className="btn btn-secondary">View Details</button>
+            </Link>
+          </div>
+        </IfMatchingUser>
+      )}
     </div>
   );
 }

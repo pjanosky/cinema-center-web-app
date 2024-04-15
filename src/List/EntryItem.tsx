@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import Poster from "../Search/MoviePoster";
 import { Link } from "react-router-dom";
 import { IfMatchingUser, IfUser } from "../Account/components";
 import RatingStars from "../Movies/RatingStars";
@@ -7,7 +6,8 @@ import { List, ListEntry } from "../API/Lists/types";
 import moviesClient from "../API/Movies/client";
 import { Movie } from "../API/Movies/types";
 import listsClient from "../API/Lists/client";
-import { useRefetchOnUnauthorized } from "../Account/hooks";
+import { useCurrentUser, useRefetchOnUnauthorized } from "../Account/hooks";
+import MoviePoster from "../Search/MoviePoster";
 
 export default function EntryItem({
   entry,
@@ -21,6 +21,7 @@ export default function EntryItem({
   const [movie, setMove] = useState<Movie | undefined>();
   const [editingEntry, setEditingEntry] = useState<ListEntry | undefined>();
   const refetchOnUnauthorized = useRefetchOnUnauthorized();
+  const currentUser = useCurrentUser();
 
   const updateEntry = async () => {
     if (!editingEntry) return;
@@ -73,14 +74,20 @@ export default function EntryItem({
         className="flex-shrink-0 flex-grow-0"
       >
         {movie && movie.poster_path && (
-          <Poster size="w92" path={movie.poster_path} />
+          <MoviePoster size="w92" path={movie.poster_path} />
         )}
       </div>
       <div className="flex-shrink-1 flex-grow-1 d-flex flex-column justify-content-between">
         <div>
-          <Link to={`/details/${entry.movieId}`} className="fw-bold cc-link">
-            {movie && movie?.title}
-          </Link>
+          <div className="fw-bold cc-link">
+            {currentUser && currentUser._id === list.userId ? (
+              <Link to={`/details/${entry.movieId}`}>
+                {movie && movie?.title}
+              </Link>
+            ) : (
+              <>{movie && movie?.title}</>
+            )}
+          </div>
           <IfUser>
             <div className="d-flex gap-3" style={{ color: "black" }}>
               {movie?.release_date &&

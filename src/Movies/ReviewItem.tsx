@@ -14,6 +14,7 @@ import reviewsClient from "../API/Reviews/client";
 import usersClient from "../API/Users/client";
 import RatingStars from "./RatingStars";
 import LikesModalButton from "./LikesModalButton";
+import MoviePoster from "../Search/MoviePoster";
 
 export default function ReviewItem({
   review,
@@ -31,6 +32,7 @@ export default function ReviewItem({
   const [movie, setMovie] = useState<Movie | undefined>();
 
   const liked = currentUser && review.likes.includes(currentUser._id);
+
   const toggleLike = async () => {
     try {
       const updatedReview = liked
@@ -41,7 +43,6 @@ export default function ReviewItem({
       console.log(error);
     }
   };
-
   const fetchUser = useCallback(async () => {
     try {
       const user = await usersClient.getUserById(review.userId);
@@ -73,11 +74,10 @@ export default function ReviewItem({
       <div className="d-flex justify-content-between">
         <div>
           <div className="fw-bold">
-            <Link to={`/details/${review.movieId}`} className="cc-link">
+            <Link to={`/details/${review.movieId}`} className="cc-link fw-bold">
               {movie?.title}
             </Link>
-            {" - "}
-            <span>{review.title}</span>
+            <span> - {review.title}</span>
           </div>
           <RatingStars stars={review.rating} />
         </div>
@@ -104,7 +104,7 @@ export default function ReviewItem({
           </button>
         </IfUser>
         <LikesModalButton review={review}>
-          <div className="btn btn-tertiary p-0 m-0 cc-like-btn">
+          <div className="cc-link">
             {review.likes.length} Like{review.likes.length === 1 ? "" : "s"}
           </div>
         </LikesModalButton>
