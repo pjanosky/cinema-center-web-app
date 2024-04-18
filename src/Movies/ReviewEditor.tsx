@@ -23,7 +23,10 @@ export default function ReviewEditor({
                 }
                 key={i}
                 style={{
-                  color: review.rating && i <= review.rating ? "gold" : "gray",
+                  color:
+                    review.rating && i <= review.rating
+                      ? "gold"
+                      : "var(--secondary-1)",
                   fontSize: "2em",
                 }}
               />

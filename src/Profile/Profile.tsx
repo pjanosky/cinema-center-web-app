@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, Routes, Route, Navigate } from "react-router";
 import usersClient from "../API/Users/client";
-import { User } from "../API/Users/types";
+import { User, isEditorUser, isWatcherUser } from "../API/Users/types";
 import { useCurrentUser, useRefetchUser } from "../Account/hooks";
 import Account from "./Account/Account";
 import Followers from "./Followers/Followers";
@@ -15,11 +15,16 @@ export default function Profile() {
   const { id } = useParams();
   const currentUser = useCurrentUser();
   const refreshUser = useRefetchUser();
-  const [user, setUser] = useState<User | undefined>();
+  const [rawUser, setUser] = useState<User | undefined>();
+  const user = currentUser && id === currentUser._id ? currentUser : rawUser;
 
   const showFollow =
     currentUser && user && currentUser._id !== id && user.role === "user";
-  const following = currentUser && id && currentUser.following.includes(id);
+  const following =
+    currentUser &&
+    isWatcherUser(currentUser) &&
+    id &&
+    currentUser.following.includes(id);
 
   const follow = async () => {
     if (currentUser && id) {
@@ -35,14 +40,14 @@ export default function Profile() {
   };
 
   const fetchUser = useCallback(async () => {
-    if (!id) return;
+    if (!id || (currentUser && id === currentUser._id)) return;
     try {
       const user = await usersClient.getUserById(id);
       setUser(user);
     } catch (error) {
       console.log(error);
     }
-  }, [id]);
+  }, [currentUser, id]);
 
   useEffect(() => {
     fetchUser();
@@ -63,11 +68,16 @@ export default function Profile() {
       </div>
       <h5>
         <span>@{user?.username || ""}</span>
-        <span style={{ color: "gray" }}>
+        <span style={{ color: "var(--secondary-1)" }}>
           {" - "}
           {user?.role === "editor" ? "Editor" : "Watcher"}
         </span>
       </h5>
+      {user && isEditorUser(user) && (
+        <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
+          Bio: {user.bio}
+        </div>
+      )}
 
       {user && (
         <ProfileNavigation user={user}>

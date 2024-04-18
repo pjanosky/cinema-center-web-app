@@ -67,18 +67,17 @@ export default function ListDetails() {
             <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
               {list && list.description}
             </div>
-            <div className="mb-3">
-              <FontAwesomeIcon icon={faUser} />
-              <span> Created by </span>
-              <Link
-                to={`/profile/${list?.userId}`}
-                className="cc-link p-0 m-0"
-                style={{ textDecorationLine: "underline important" }}
+            <Link to={`/profile/${list?.userId}`} className="p-0 m-0">
+              <div
+                className="mb-3 cc-link"
+                style={{ color: "var(--secondary-1)" }}
               >
-                {user && user.name}
-              </Link>
-              <span> on {date}</span>
-            </div>
+                <FontAwesomeIcon icon={faUser} className="me-2" />
+                <span>
+                  Created by {user && user.name} on {date}
+                </span>
+              </div>
+            </Link>
           </div>
           <IfMatchingUser userId={list?.userId || ""}>
             <div className="flex-shrink-0 flex-grow-0">
@@ -92,7 +91,7 @@ export default function ListDetails() {
           </IfMatchingUser>
         </div>
       )}
-      <h2>Movies</h2>
+      <h2>Movies ({list?.entries.length || 0})</h2>
       {list && (
         <EntryList
           list={list}

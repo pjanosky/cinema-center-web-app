@@ -31,6 +31,7 @@ export default function ListEditor({
           Title
           <input
             className="form-control"
+            placeholder="Title your list"
             value={editingList.title}
             onChange={(e) =>
               setEditingList({
@@ -46,6 +47,7 @@ export default function ListEditor({
           Description
           <textarea
             className="form-control"
+            placeholder="Describe what kinds of movies are in this list"
             value={editingList.description}
             onChange={(e) =>
               setEditingList({

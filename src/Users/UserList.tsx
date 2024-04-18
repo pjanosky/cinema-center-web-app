@@ -14,7 +14,7 @@ export default function UserList({ users }: { users: User[] }) {
                 <div
                   style={{
                     borderRadius: "50%",
-                    backgroundColor: "lightgray",
+                    backgroundColor: "var(--secondary-2)",
                   }}
                 >
                   <FontAwesomeIcon
@@ -22,7 +22,7 @@ export default function UserList({ users }: { users: User[] }) {
                     style={{
                       margin: "0.4em",
                       fontSize: "1.5em",
-                      color: "gray",
+                      color: "var(--secondary-1)",
                       aspectRatio: 1,
                     }}
                   />
@@ -30,11 +30,13 @@ export default function UserList({ users }: { users: User[] }) {
                 <div className="flex-grow-1">
                   {user.name}
                   <br />
-                  <span style={{ color: "gray" }}>@{user.username}</span>
+                  <span style={{ color: "var(--secondary-1)" }}>
+                    @{user.username}
+                  </span>
                 </div>
                 <FontAwesomeIcon
                   icon={faChevronRight}
-                  style={{ color: "lightgray" }}
+                  style={{ color: "var(--secondary-1)" }}
                 />
               </div>
             </Link>

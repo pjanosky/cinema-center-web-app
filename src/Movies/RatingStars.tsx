@@ -11,7 +11,7 @@ export default function RatingStars({ stars }: { stars: number }) {
           icon={faStar}
           key={i}
           style={{
-            color: i <= Math.round(stars) ? "gold" : "lightgray",
+            color: i <= Math.round(stars) ? "gold" : "var(--secondary-2)",
           }}
         />
       ))}

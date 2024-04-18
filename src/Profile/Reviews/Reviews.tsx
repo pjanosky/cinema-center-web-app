@@ -29,7 +29,7 @@ export default function Reviews() {
 
   return (
     <div>
-      <h2>Reviews</h2>
+      <h2>Reviews ({reviews.length})</h2>
       <ReviewsList reviews={reviews} setReviews={setReviews} />
     </div>
   );

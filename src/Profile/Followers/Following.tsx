@@ -19,7 +19,7 @@ export default function Following() {
 
   return (
     <div>
-      <h2>Following</h2>
+      <h2>Following ({users.length})</h2>
       <UserList users={users} />
     </div>
   );

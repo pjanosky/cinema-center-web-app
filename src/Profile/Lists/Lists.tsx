@@ -44,8 +44,8 @@ export default function Lists() {
     <div>
       <h2>Lists</h2>
       <IfMatchingUser userId={id}>
-        <div style={{ maxWidth: "800px" }}>
-          <h3>Add a new list</h3>
+        <div className="mb-4" style={{ maxWidth: "800px" }}>
+          <h3>Create a new list</h3>
           <div className="mb-3">
             <label className="w-100">
               Title
@@ -58,6 +58,7 @@ export default function Lists() {
                     title: e.target.value,
                   }))
                 }
+                placeholder="Title your list"
               />
             </label>
           </div>
@@ -73,12 +74,13 @@ export default function Lists() {
                     description: e.target.value,
                   }))
                 }
+                placeholder="Describe what kinds of movies are in this list"
               ></textarea>
             </label>
           </div>
           <div className="mb-3">
             <button className="btn btn-primary" onClick={addList}>
-              Add
+              Create List
             </button>
           </div>
           {error && (
@@ -88,7 +90,7 @@ export default function Lists() {
           )}
         </div>
       </IfMatchingUser>
-      <div>
+      <div className="mb-4">
         <h3>Existing Lists</h3>
         <ListList lists={lists} setLists={setLists} />
       </div>

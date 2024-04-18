@@ -69,7 +69,7 @@ export default function ReviewItem({
 
   return (
     <div className="cc-review-item">
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-sm-between flex-column flex-sm-row">
         <div>
           <div className="fw-bold">
             <Link to={`/details/${review.movieId}`} className="cc-link fw-bold">
@@ -79,10 +79,15 @@ export default function ReviewItem({
           </div>
           <RatingStars stars={review.rating} />
         </div>
-        <Link to={`/profile/${user?._id}`} className="text-end cc-link">
-          <div>{date}</div>
-          <div>{user?.name}</div>
-        </Link>
+        <div style={{ minWidth: "100px" }}>
+          <Link
+            to={`/profile/${user?._id}`}
+            className="text-start text-sm-end cc-link"
+          >
+            <div style={{ color: "var(--secondary-1)" }}>{date}</div>
+            <div style={{ color: "var(--secondary-1)" }}>{user?.name}</div>
+          </Link>
+        </div>
       </div>
       <div className="my-1" style={{ whiteSpace: "pre-wrap" }}>
         {review.content}
@@ -107,13 +112,13 @@ export default function ReviewItem({
           </button>
         </IfUser>
         <LikesModalButton review={review}>
-          <div className="cc-link">
+          <div className="cc-link" style={{ color: "var(--secondary-1)" }}>
             {review.likes.length} Like{review.likes.length === 1 ? "" : "s"}
           </div>
         </LikesModalButton>
       </div>
       <IfMatchingUser userId={review.userId}>
-        <div className="d-flex gap-2 mt-2">
+        <div className="d-flex gap-2 mt-2 flex-wrap">
           <button
             className="btn btn-primary"
             onClick={() => editReview(review)}

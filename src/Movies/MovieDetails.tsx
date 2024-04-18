@@ -11,10 +11,11 @@ import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import { Movie } from "../API/Movies/types";
 import { Review } from "../API/Reviews/types";
-import RatingStars from "./RatingStars";
 import ReviewEditor from "./ReviewEditor";
 import MoviePoster from "./MoviePoster";
 import MoviesList from "./MoviesList";
+import MovieDetailsHeader from "./MovieDetailsHeader";
+import MovieCast from "./MovieCast";
 
 export default function MovieDetails() {
   const { id: movieId } = useParams();
@@ -40,11 +41,6 @@ export default function MovieDetails() {
 
   const hasUserReview =
     reviews.find((review) => review.userId === currentUser?._id) !== undefined;
-  const ratingAverage =
-    reviews.length > 0
-      ? reviews.reduce((total, review) => total + review.rating, 0.0) /
-        reviews.length
-      : -1;
   const unaddedUserLists = userLists.filter(
     (userList) =>
       !movieLists.find((movieList) => movieList._id === userList._id)
@@ -175,77 +171,57 @@ export default function MovieDetails() {
 
   useEffect(() => {
     fetchDetails();
+  }, [fetchDetails]);
+  useEffect(() => {
     fetchReviews();
+  }, [fetchReviews]);
+  useEffect(() => {
     fetchUserLists();
+  }, [fetchUserLists]);
+  useEffect(() => {
     fetchMovieLists();
-  }, [fetchDetails, fetchUserLists, fetchReviews, fetchMovieLists]);
+  }, [fetchMovieLists]);
 
+  const overlap = "150px";
+  const padding = "100px";
   return (
     <div>
-      <div className="w-100 mb-4">
-        {details?.backdrop_path && (
-          <MoviePoster
-            size="w1280"
-            path={details.backdrop_path}
-            showPlaceholder={false}
-          />
-        )}
-      </div>
       <div className="mb-4">
-        <h1>{details?.title || ""}</h1>
-
-        <div style={{ columnGap: "25px" }} className="d-flex flex-wrap">
-          {reviews.length > 0 && (
-            <div className="d-flex align-items-center">
-              <RatingStars stars={ratingAverage} />
-              <span className="ms-1">
-                ({reviews.length} Rating{reviews.length === 1 ? "" : "s"})
-              </span>
+        {details?.backdrop_path ? (
+          <div style={{ margin: `-1.5rem -1.5rem -${overlap} -1.5rem` }}>
+            <div
+              className="w-100 d-flex justify-content-center align-items-center"
+              style={{
+                maxHeight: "60vh",
+                overflow: "hidden",
+              }}
+            >
+              <MoviePoster size="w1280" path={details?.backdrop_path} />
             </div>
-          )}
-          <div>
-            {details?.genres &&
-              details.genres.map((genre) => genre.name).join(" | ")}
+            <div
+              className="position-relative pb-3"
+              style={{
+                top: `-${overlap}`,
+                color: "white",
+                background: `linear-gradient(transparent, var(--foreground-1) ${overlap}, var(--foreground-1)`,
+                paddingTop: padding,
+              }}
+            >
+              <div style={{ margin: "0 1.5rem 0 1.5rem" }}>
+                {details && (
+                  <MovieDetailsHeader details={details} reviews={reviews} />
+                )}
+              </div>
+            </div>
           </div>
-          <div>
-            {details?.release_date &&
-              `Released ${new Date(details.release_date).getFullYear()}`}
-          </div>
-          <div>{details?.runtime && details.runtime} Minutes</div>
-        </div>
-        <div className="my-1">{details?.overview && details.overview}</div>
+        ) : (
+          <MovieDetailsHeader details={details} reviews={reviews} />
+        )}
       </div>
       {details && details.cast.length > 0 && (
         <div className="mb-4 w-100">
           <h2>Cast</h2>
-          <div className="d-flex flex-wrap gap-3">
-            {details.cast.map((member) => (
-              <div
-                key={member.id}
-                style={{
-                  width: "100px",
-                  textAlign: "center",
-                  wordBreak: "break-word",
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    aspectRatio: "1",
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{ width: "100px", height: "150px", margin: "auto" }}
-                  >
-                    <MoviePoster size="w185" path={member.profile_path} />
-                  </div>
-                </div>
-                {member.name}
-              </div>
-            ))}
-          </div>
+          <MovieCast details={details} />
         </div>
       )}
       <IfUser>
@@ -275,33 +251,39 @@ export default function MovieDetails() {
         <div className="mb-4" style={{ maxWidth: "800px" }}>
           <h2>Add to List</h2>
           <div className="mb-3">
-            <select
-              className="form-select"
-              value={selectedListId}
-              onChange={(e) => setSelectedListId(e.target.value)}
-              disabled={unaddedUserLists.length === 0}
-            >
-              {unaddedUserLists.map((list) => (
-                <option key={list._id} value={list._id}>
-                  {list.title}
-                </option>
-              ))}
-              {unaddedUserLists.length === 0 ? (
-                <option>No lists available</option>
-              ) : (
-                <></>
-              )}
-            </select>
+            <label className="w-100">
+              List
+              <select
+                className="form-select"
+                value={selectedListId}
+                onChange={(e) => setSelectedListId(e.target.value)}
+                disabled={unaddedUserLists.length === 0}
+              >
+                {unaddedUserLists.map((list) => (
+                  <option key={list._id} value={list._id}>
+                    {list.title}
+                  </option>
+                ))}
+                {unaddedUserLists.length === 0 ? (
+                  <option>No lists available</option>
+                ) : (
+                  <></>
+                )}
+              </select>
+            </label>
           </div>
           <div className="mb-3">
-            <textarea
-              className="form-control"
-              value={description}
-              rows={5}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Description"
-              disabled={unaddedUserLists.length === 0}
-            ></textarea>
+            <label className="w-100">
+              Description
+              <textarea
+                className="form-control"
+                value={description}
+                rows={5}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe this movie to watchers"
+                disabled={unaddedUserLists.length === 0}
+              ></textarea>
+            </label>
           </div>
           <div className="mb-3">
             <button
@@ -309,7 +291,7 @@ export default function MovieDetails() {
               onClick={addToList}
               disabled={unaddedUserLists.length === 0}
             >
-              Add
+              Add to List
             </button>
           </div>
           {error && <div className="alert alert-danger mb-3">{error}</div>}

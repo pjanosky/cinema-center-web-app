@@ -2,15 +2,15 @@ import axios from "axios";
 import { Review, NewReview, UpdateReview } from "./types";
 
 async function getReviewsByUser(userId: string): Promise<Review[]> {
-  const response = await axios.get(`/reviews?userId=${userId}`);
+  const response = await axios.get(`/reviews?userId=${userId}&sort=date`);
   return response.data;
 }
 async function getReviewsLikedByUser(userId: string): Promise<Review[]> {
-  const response = await axios.get(`/reviews?likedBy=${userId}`);
+  const response = await axios.get(`/reviews?likedBy=${userId}&sort=date`);
   return response.data;
 }
 async function getReviewsByMovie(movieId: string): Promise<Review[]> {
-  const response = await axios.get(`/reviews?movieId=${movieId}`);
+  const response = await axios.get(`/reviews?movieId=${movieId}&sort=date`);
   return response.data;
 }
 async function getFollowerReviews(userId: string): Promise<Review[]> {

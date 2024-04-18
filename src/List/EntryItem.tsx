@@ -7,7 +7,8 @@ import { Movie } from "../API/Movies/types";
 import { IfUser, IfMatchingUser } from "../Account/Components";
 import { useRefetchOnUnauthorized, useCurrentUser } from "../Account/hooks";
 import MoviePoster from "../Movies/MoviePoster";
-import RatingStars from "../Movies/RatingStars";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVideo } from "@fortawesome/free-solid-svg-icons";
 
 export default function EntryItem({
   entry,
@@ -74,10 +75,20 @@ export default function EntryItem({
         className="flex-shrink-0 flex-grow-0"
       >
         {movie && movie.poster_path && (
-          <MoviePoster size="w92" path={movie.poster_path} />
+          <MoviePoster size="w92" path={movie.poster_path}>
+            <div
+              className="w-100 h-100 d-flex align-items-center justify-content-center"
+              style={{ backgroundColor: "var(--secondary-2)" }}
+            >
+              <FontAwesomeIcon
+                icon={faVideo}
+                style={{ color: "var(--secondary-1)", fontSize: "2rem" }}
+              />
+            </div>
+          </MoviePoster>
         )}
       </div>
-      <div className="flex-shrink-1 flex-grow-1 d-flex flex-column justify-content-between">
+      <div className="flex-shrink-1 flex-grow-1 d-flex flex-column justify-content-between flex-wrap">
         <div>
           <div className="fw-bold cc-link">
             {currentUser && currentUser._id === list.userId ? (
@@ -89,10 +100,9 @@ export default function EntryItem({
             )}
           </div>
           <IfUser>
-            <div className="d-flex gap-3" style={{ color: "black" }}>
+            <div style={{ color: "var(--secondary-1)" }}>
               {movie?.release_date &&
                 new Date(movie.release_date).getFullYear()}
-              {movie?.stars && <RatingStars stars={movie.stars} />}
             </div>
           </IfUser>
           {editingEntry ? (
@@ -107,15 +117,17 @@ export default function EntryItem({
                     description: e.target.value,
                   })
                 }
-                placeholder="Description"
+                placeholder="Describe this movie to watchers"
               ></textarea>
             </div>
           ) : (
-            <div style={{ whiteSpace: "pre-wrap" }}>{entry.description}</div>
+            <div style={{ whiteSpace: "pre-wrap", minWidth: "200px" }}>
+              {entry.description}
+            </div>
           )}
         </div>
         <IfMatchingUser userId={list.userId}>
-          <div className="d-flex gap-2 mt-2">
+          <div className="d-flex gap-2 mt-2 flex-wrap">
             {editingEntry ? (
               <>
                 <button

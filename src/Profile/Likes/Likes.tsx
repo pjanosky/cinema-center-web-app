@@ -26,7 +26,10 @@ export default function Likes() {
 
   return (
     <div>
-      <h2>Likes</h2>
+      <h2>
+        Likes (
+        {reviews.filter((review) => !!id && review.likes.includes(id)).length})
+      </h2>
       <ReviewsList
         reviews={reviews}
         setReviews={setReviews}

@@ -14,11 +14,18 @@ code {
 
 :root {
   --accent-color: #7253ed;
+  --foreground-1: rgb(25, 25, 35);
+  --background-1: rgb(255, 255, 255);
+  --secondary-1: rgb(128, 129, 150);
+  --secondary-2: rgb(225, 225, 230);
+  --foreground-2: rgb(5, 5, 5);
+  --background-2: rgb(245 246 250);
+  --navigation-width: "200px";
 }
 
 a {
   text-decoration: none !important;
-  color: black !important;
+  color: var(--foreground-1) !important;
 }
 
 .cc-link:hover {
@@ -28,6 +35,25 @@ a {
 .cc-link-accent {
   color: var(--accent-color) !important;
   text-decoration-line: underline !important;
+}
+
+input,
+textarea,
+select,
+.list-group-item {
+  color: var(--foreground-1) !important;
+}
+
+input:enabled,
+textarea:enabled,
+select,
+.list-group-item {
+  color: var(--foreground-1) !important;
+  background-color: var(--background-1) !important;
+}
+
+.list-group-item {
+  border-color: var(--secondary-2) !important;
 }
 
 .btn-primary,

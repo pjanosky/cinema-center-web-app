@@ -30,7 +30,7 @@ export default function Navigation({
           style={{
             height: navBarHeight,
             pointerEvents: "auto",
-            borderBottom: "1px solid lightgray",
+            borderBottom: "1px solid var(--secondary-2)",
           }}
         >
           <button
@@ -71,7 +71,7 @@ export default function Navigation({
           className="flex-shrink-0 d-none d-md-block position-fixed h-100"
           style={{
             width: sidebarWidth,
-            borderRight: "1px solid lightgray",
+            borderRight: "1px solid var(--secondary-2)",
             overflowY: "auto",
           }}
         >
@@ -84,7 +84,7 @@ export default function Navigation({
         <div
           className="flex-shrink-1 flex-grow-1"
           style={{
-            padding: "20px",
+            padding: "1.5rem",
             minWidth: "0px",
           }}
         >

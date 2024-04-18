@@ -19,7 +19,7 @@ export default function Followers() {
 
   return (
     <div>
-      <h2>Followers</h2>
+      <h2>Followers ({users.length})</h2>
       <UserList users={users} />
     </div>
   );

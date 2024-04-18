@@ -26,7 +26,7 @@ export default function ListList({
         .filter((list) => !showList || showList(list))
         .map((list) => (
           <li key={list._id} className="list-group-item">
-            {currentUser && currentUser._id === list.userId ? (
+            {currentUser && currentUser._id === list.userId && editable ? (
               <ListItem
                 list={list}
                 setLists={setLists}

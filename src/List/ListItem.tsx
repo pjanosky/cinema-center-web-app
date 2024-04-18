@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import { IfMatchingUser } from "../Account/Components";
 import { useRefetchOnUnauthorized } from "../Account/hooks";
 import ListEditor from "./ListEditor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faList } from "@fortawesome/free-solid-svg-icons";
+import { User } from "../API/Users/types";
+import usersClient from "../API/Users/client";
 
 export default function ListItem({
   list,
@@ -18,6 +22,7 @@ export default function ListItem({
   editable: boolean;
 }) {
   const [editingList, setEditingList] = useState<List | undefined>();
+  const [user, setUser] = useState<User>();
   const refetchOnUnauthorized = useRefetchOnUnauthorized();
 
   const deleteList = async () => {
@@ -39,6 +44,18 @@ export default function ListItem({
       console.log(error);
     }
   };
+  const fetchUser = useCallback(async () => {
+    try {
+      const user = await usersClient.getUserById(list.userId);
+      setUser(user);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [list.userId]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return editingList ? (
     <div>
@@ -56,41 +73,53 @@ export default function ListItem({
     </div>
   ) : (
     <div>
-      <div className="fw-bold">{list.title}</div>
-      <div style={{ whiteSpace: "pre-wrap" }}>{list.description}</div>
-      <div className="mb-2">
-        {list.entries.length} Movie
-        {list.entries.length === 1 ? "" : "s"}
-      </div>
-      {editable && (
-        <IfMatchingUser userId={list.userId}>
-          <div className="mb-2 d-flex gap-2">
-            {movieId ? (
-              <button className="btn btn-danger" onClick={removeEntryFromList}>
-                Remove from list
-              </button>
-            ) : (
-              <>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => setEditingList(list)}
-                >
-                  Edit
-                </button>
-                <button className="btn btn-danger" onClick={deleteList}>
-                  Delete
-                </button>
-              </>
-            )}
-            <Link
-              to={`/lists/${list._id}`}
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              <button className="btn btn-secondary">View Details</button>
-            </Link>
+      <div className="d-flex gap-3 align-items-start">
+        <div className="d-none d-sm-block" style={{ height: "1.5rem" }}>
+          <FontAwesomeIcon icon={faList} />
+        </div>
+        <div className="flex-grow-1 flex-shrink-1">
+          <div className="fw-bold" style={{ lineHeight: "1.5rem" }}>
+            {list.title}
           </div>
-        </IfMatchingUser>
-      )}
+          <div style={{ whiteSpace: "pre-wrap" }}>{list.description}</div>
+          <div className="mb-2" style={{ color: "var(--secondary-1)" }}>
+            {list.entries.length} Movie
+            {list.entries.length === 1 ? "" : "s"}
+          </div>
+          {editable && (
+            <IfMatchingUser userId={list.userId}>
+              <div className="mb-2 d-flex gap-2 flex-wrap">
+                {movieId ? (
+                  <button
+                    className="btn btn-danger"
+                    onClick={removeEntryFromList}
+                  >
+                    Remove from list
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => setEditingList(list)}
+                    >
+                      Edit
+                    </button>
+                    <button className="btn btn-danger" onClick={deleteList}>
+                      Delete
+                    </button>
+                  </>
+                )}
+                <Link
+                  to={`/lists/${list._id}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <button className="btn btn-secondary">View Details</button>
+                </Link>
+              </div>
+            </IfMatchingUser>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

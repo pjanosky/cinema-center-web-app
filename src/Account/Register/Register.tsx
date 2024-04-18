@@ -64,6 +64,7 @@ export default function Register() {
             Name
             <input
               type="text"
+              placeholder="John Doe"
               spellCheck={false}
               autoComplete="name"
               className="form-control"
@@ -79,6 +80,7 @@ export default function Register() {
             Email
             <input
               type="email"
+              placeholder="username@example.com"
               autoComplete="email"
               className="form-control"
               value={user.email}
@@ -94,6 +96,7 @@ export default function Register() {
             <input
               type="text"
               autoComplete="username"
+              placeholder="username"
               spellCheck={false}
               autoCapitalize="off"
               className="form-control"
@@ -110,6 +113,7 @@ export default function Register() {
             <InputGroup>
               <input
                 type={showPassword ? "text" : "password"}
+                placeholder="Enter a password"
                 autoComplete="new-password"
                 className="form-control"
                 value={user.password}
@@ -132,6 +136,7 @@ export default function Register() {
             <InputGroup>
               <input
                 type={showPassword ? "text" : "password"}
+                placeholder="Enter your password again"
                 autoComplete="new-password"
                 className="form-control"
                 value={user.confirmPassword}
