@@ -82,7 +82,8 @@ export default function EntryItem({
             >
               <FontAwesomeIcon
                 icon={faVideo}
-                style={{ color: "var(--secondary-1)", fontSize: "2rem" }}
+                className="cc-secondary-1"
+                style={{ fontSize: "2rem" }}
               />
             </div>
           </MoviePoster>
@@ -100,7 +101,7 @@ export default function EntryItem({
             )}
           </div>
           <IfUser>
-            <div style={{ color: "var(--secondary-1)" }}>
+            <div className="cc-secondary-1">
               {movie?.release_date &&
                 new Date(movie.release_date).getFullYear()}
             </div>

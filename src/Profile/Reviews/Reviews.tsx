@@ -36,7 +36,7 @@ export default function Reviews() {
         <ReviewList reviews={reviews} setReviews={setReviews} />
       ) : (
         <EmptyStateGraphic
-          name="reviews"
+          name="No reviews"
           icon={faMessage}
           subtitle="Search for a movie to add a review"
           userId={id}

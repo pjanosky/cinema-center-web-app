@@ -46,6 +46,7 @@ export default function Login() {
             Username
             <input
               type="text"
+              placeholder="username"
               autoComplete="username"
               spellCheck={false}
               autoCapitalize="off"
@@ -62,6 +63,7 @@ export default function Login() {
             <InputGroup>
               <input
                 type={showPassword ? "text" : "password"}
+                placeholder="password"
                 autoComplete="current-password"
                 className="form-control"
                 value={password}

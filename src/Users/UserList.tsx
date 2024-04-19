@@ -14,15 +14,15 @@ export default function UserList({ users }: { users: User[] }) {
                 <div
                   style={{
                     borderRadius: "50%",
-                    backgroundColor: "var(--secondary-2)",
                   }}
+                  className="cc-bg-secondary-2"
                 >
                   <FontAwesomeIcon
                     icon={faUser}
+                    className="cc-secondary-1"
                     style={{
                       margin: "0.4em",
                       fontSize: "1.5em",
-                      color: "var(--secondary-1)",
                       aspectRatio: 1,
                     }}
                   />
@@ -30,13 +30,11 @@ export default function UserList({ users }: { users: User[] }) {
                 <div className="flex-grow-1">
                   {user.name}
                   <br />
-                  <span style={{ color: "var(--secondary-1)" }}>
-                    @{user.username}
-                  </span>
+                  <span className="cc-secondary-1">@{user.username}</span>
                 </div>
                 <FontAwesomeIcon
                   icon={faChevronRight}
-                  style={{ color: "var(--secondary-1)" }}
+                  className="cc-secondary-1"
                 />
               </div>
             </Link>

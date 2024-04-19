@@ -68,10 +68,7 @@ export default function ListDetails() {
               {list && list.description}
             </div>
             <Link to={`/profile/${list?.userId}`} className="p-0 m-0">
-              <div
-                className="mb-3 cc-link"
-                style={{ color: "var(--secondary-1)" }}
-              >
+              <div className="mb-3 cc-link cc-secondary-1">
                 <FontAwesomeIcon icon={faUser} className="me-2" />
                 <span>
                   Created by {user && user.name} on {date}

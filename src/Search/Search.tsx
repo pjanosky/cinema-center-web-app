@@ -110,7 +110,7 @@ export default function Search() {
 
   const emptyStateGraphic = (
     <EmptyStateGraphic
-      name="results"
+      name="No results"
       icon={faSearch}
       subtitle="Try a different search"
     />
@@ -176,7 +176,6 @@ export default function Search() {
           name="Search"
           icon={faSearch}
           subtitle="Enter a search term to get started"
-          includeNo={false}
         />
       )}
     </div>

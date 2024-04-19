@@ -6,6 +6,9 @@ import { Review } from "../API/Reviews/types";
 import { useCurrentUser } from "../Users/Hooks";
 import ListList from "../List/ListList";
 import ReviewList from "../Reviews/ReviewList";
+import EmptyStateGraphic from "../EmptyState";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 
 export default function UserHome() {
   const [lists, setLists] = useState<List[]>([]);
@@ -55,17 +58,44 @@ export default function UserHome() {
       <div className="mb-4">
         <h2>What to Watch</h2>
         <h5 className="mb-3">Recent watch lists curated by our editors</h5>
-        <ListList lists={lists} setLists={setLists} />
+        {lists.length > 0 ? (
+          <ListList lists={lists} setLists={setLists} />
+        ) : (
+          <EmptyStateGraphic
+            name="No lists"
+            icon={faList}
+            subtitle="Stay tuned for watch lists created by out editors"
+          />
+        )}
       </div>
       <div className="mb-4">
         <h2>Recent Follower Reviews</h2>
         <h5 className="mb-3">Recent movie reviews created by my followers</h5>
-        <ReviewList reviews={followerReviews} setReviews={setFollowerReviews} />
+        {followerReviews.length > 0 ? (
+          <ReviewList
+            reviews={followerReviews}
+            setReviews={setFollowerReviews}
+          />
+        ) : (
+          <EmptyStateGraphic
+            name="No reviews"
+            icon={faMessage}
+            subtitle="Try searching for users to follow"
+          />
+        )}
       </div>
       <div className="mb-4">
         <h2>My Recent Reviews</h2>
         <h5 className="mb-3">Recent movie reviews created by me</h5>
-        <ReviewList reviews={myReviews} setReviews={setMyReviews} />
+        {myReviews.length > 0 ? (
+          <ReviewList reviews={myReviews} setReviews={setMyReviews} />
+        ) : (
+          <EmptyStateGraphic
+            name="No reviews"
+            icon={faMessage}
+            subtitle="Search for a movie to write a review"
+          />
+        )}
       </div>
     </div>
   );

@@ -99,7 +99,7 @@ export default function Lists() {
         <ListList lists={lists} setLists={setLists} />
       ) : (
         <EmptyStateGraphic
-          name="lists"
+          name="No lists"
           icon={faList}
           subtitle="Add a list above"
           userId={id}

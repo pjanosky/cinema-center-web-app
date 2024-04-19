@@ -13,7 +13,6 @@ export default function Navigation({
   const [showSidebar, setShowSidebar] = useState(false);
 
   const navBarHeight = "50px";
-  const sidebarWidth = "250px";
   return (
     <div>
       <div
@@ -30,7 +29,6 @@ export default function Navigation({
           style={{
             height: navBarHeight,
             pointerEvents: "auto",
-            // borderBottom: "1px solid var(--secondary-2)",
           }}
         >
           <button
@@ -54,7 +52,7 @@ export default function Navigation({
           >
             <div
               className="flex-shrink-0 flex-grow-1 h-100"
-              style={{ maxWidth: sidebarWidth, overflowY: "auto" }}
+              style={{ maxWidth: "var(--nav-width)", overflowY: "auto" }}
             >
               <NavigationLinks onClick={() => setShowSidebar(false)} />
             </div>
@@ -70,15 +68,14 @@ export default function Navigation({
         <div
           className="flex-shrink-0 d-none d-md-block position-fixed h-100"
           style={{
-            width: sidebarWidth,
-            // borderRight: "1px solid var(--secondary-2)",
+            width: "var(--nav-width)",
             overflowY: "auto",
           }}
         >
           <NavigationLinks />
         </div>
         <div
-          style={{ width: sidebarWidth }}
+          style={{ width: "var(--nav-width)" }}
           className="d-none d-md-block flex-shrink-0 flex-grow-0"
         />
         <div

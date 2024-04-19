@@ -26,7 +26,7 @@ export default function Following() {
         <UserList users={users} />
       ) : (
         <EmptyStateGraphic
-          name="following"
+          name="No following"
           icon={faUsers}
           subtitle="Try searching for users to follow"
           userId={id}

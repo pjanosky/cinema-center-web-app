@@ -26,7 +26,7 @@ export default function Followers() {
         <UserList users={users} />
       ) : (
         <EmptyStateGraphic
-          name="followers"
+          name="No followers"
           icon={faUsers}
           subtitle="Other users who follow you will appear here"
           userId={id}

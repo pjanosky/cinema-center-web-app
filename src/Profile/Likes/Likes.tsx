@@ -40,7 +40,7 @@ export default function Likes() {
         />
       ) : (
         <EmptyStateGraphic
-          name="likes"
+          name="No likes"
           subtitle="Press the heart button to like a review"
           userId={id}
           icon={faHeart}

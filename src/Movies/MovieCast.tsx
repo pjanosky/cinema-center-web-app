@@ -26,16 +26,16 @@ export default function MovieCast({ details }: { details: Movie }) {
             <div style={{ width: "100px", height: "150px", margin: "auto" }}>
               <MoviePoster size="w185" path={member.profile_path}>
                 <div
-                  className="d-flex align-items-center justify-content-center"
+                  className="d-flex align-items-center justify-content-center cc-bg-secondary-2"
                   style={{
-                    backgroundColor: "var(--secondary-2)",
                     width: "100px",
                     height: "100px",
                   }}
                 >
                   <FontAwesomeIcon
                     icon={faUser}
-                    style={{ color: "var(--secondary-1)", fontSize: "2.5rem" }}
+                    className="cc-secondary-1"
+                    style={{ fontSize: "2.5rem" }}
                   />
                 </div>
               </MoviePoster>

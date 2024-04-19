@@ -20,7 +20,19 @@ code {
   --secondary-2: rgb(220, 220, 230);
   --foreground-2: rgb(5, 5, 5);
   --background-2: rgb(245 246 250);
-  --navigation-width: "200px";
+  --nav-width: 250px;
+}
+
+.cc-accent {
+  color: var(--accent-color);
+}
+
+.cc-secondary-1 {
+  color: var(--secondary-1);
+}
+
+.cc-bg-secondary-2 {
+  background-color: var(--secondary-2);
 }
 
 a {

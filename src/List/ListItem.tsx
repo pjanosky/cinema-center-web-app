@@ -67,7 +67,7 @@ export default function ListItem({
             {list.title}
           </div>
           <div style={{ whiteSpace: "pre-wrap" }}>{list.description}</div>
-          <div className="mb-2" style={{ color: "var(--secondary-1)" }}>
+          <div className="mb-2 cc-secondary-1">
             {list.entries.length} Movie
             {list.entries.length === 1 ? "" : "s"}
           </div>

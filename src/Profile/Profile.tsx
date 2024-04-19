@@ -68,7 +68,7 @@ export default function Profile() {
       </div>
       <h5>
         <span>@{user?.username || ""}</span>
-        <span style={{ color: "var(--secondary-1)" }}>
+        <span className="cc-secondary-1">
           {" - "}
           {user?.role === "editor" ? "Editor" : "Watcher"}
         </span>

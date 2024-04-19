@@ -84,8 +84,10 @@ export default function ReviewItem({
             to={`/profile/${user?._id}`}
             className="text-start text-sm-end cc-link"
           >
-            <div style={{ color: "var(--secondary-1)" }}>{date}</div>
-            <div style={{ color: "var(--secondary-1)" }}>{user?.name}</div>
+            <div className="cc-link cc-secondary-1">
+              <div>{date}</div>
+              <div>{user?.name}</div>
+            </div>
           </Link>
         </div>
       </div>
@@ -98,11 +100,10 @@ export default function ReviewItem({
             onClick={toggleLike}
             style={{
               fontSize: "1.5em",
-              color: "var(--accent-color)",
               backgroundColor: "transparent",
               border: "none",
             }}
-            className={"btn btn-tertiary px-0 py-0 cc-link"}
+            className={"btn btn-tertiary px-0 py-0 cc-link cc-accent"}
           >
             {liked ? (
               <FontAwesomeIcon icon={faHeartSolid} />
@@ -112,7 +113,7 @@ export default function ReviewItem({
           </button>
         </IfUser>
         <LikesModalButton review={review}>
-          <div className="cc-link" style={{ color: "var(--secondary-1)" }}>
+          <div className="cc-secondary-1 cc-link">
             {review.likes.length} Like{review.likes.length === 1 ? "" : "s"}
           </div>
         </LikesModalButton>
