@@ -2,10 +2,10 @@ import { useState, useCallback, useEffect } from "react";
 import { useParams, Routes, Route, Navigate } from "react-router";
 import usersClient from "../API/Users/client";
 import { User, isEditorUser, isWatcherUser } from "../API/Users/types";
-import { useCurrentUser, useRefetchUser } from "../Account/hooks";
+import { useCurrentUser, useRefetchUser } from "../Users/Hooks";
 import Account from "./Account/Account";
 import Followers from "./Followers/Followers";
-import Following from "./Followers/Following";
+import Following from "./Following/Following";
 import Likes from "./Likes/Likes";
 import Lists from "./Lists/Lists";
 import ProfileNavigation from "./Navigation/ProfileNavigation";
@@ -14,7 +14,7 @@ import Reviews from "./Reviews/Reviews";
 export default function Profile() {
   const { id } = useParams();
   const currentUser = useCurrentUser();
-  const refreshUser = useRefetchUser();
+  const refetchUser = useRefetchUser();
   const [rawUser, setUser] = useState<User | undefined>();
   const user = currentUser && id === currentUser._id ? currentUser : rawUser;
 
@@ -29,13 +29,13 @@ export default function Profile() {
   const follow = async () => {
     if (currentUser && id) {
       await usersClient.followUser(currentUser._id, id);
-      await refreshUser();
+      await refetchUser();
     }
   };
   const unfollow = async () => {
     if (currentUser && id) {
       await usersClient.unfollowUser(currentUser._id, id);
-      await refreshUser();
+      await refetchUser();
     }
   };
 
@@ -73,7 +73,7 @@ export default function Profile() {
           {user?.role === "editor" ? "Editor" : "Watcher"}
         </span>
       </h5>
-      {user && isEditorUser(user) && (
+      {user && isEditorUser(user) && user.bio && (
         <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
           Bio: {user.bio}
         </div>

@@ -2,7 +2,7 @@ import { DropdownButton, Dropdown } from "react-bootstrap";
 import { useLocation, useParams, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { User } from "../../API/Users/types";
-import { useCurrentUser } from "../../Account/hooks";
+import { useCurrentUser } from "../../Users/Hooks";
 import "./index.css";
 
 export default function ProfileNavigation({

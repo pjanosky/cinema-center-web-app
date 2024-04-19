@@ -3,6 +3,8 @@ import { useParams } from "react-router";
 import usersClient from "../../API/Users/client";
 import { User } from "../../API/Users/types";
 import UserList from "../../Users/UserList";
+import EmptyStateGraphic from "../../EmptyState";
+import { faUsers } from "@fortawesome/free-solid-svg-icons";
 
 export default function Followers() {
   const { id } = useParams();
@@ -20,7 +22,16 @@ export default function Followers() {
   return (
     <div>
       <h2>Followers ({users.length})</h2>
-      <UserList users={users} />
+      {users.length > 0 ? (
+        <UserList users={users} />
+      ) : (
+        <EmptyStateGraphic
+          name="followers"
+          icon={faUsers}
+          subtitle="Other users who follow you will appear here"
+          userId={id}
+        />
+      )}
     </div>
   );
 }

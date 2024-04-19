@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import usersClient from "../../API/Users/client";
 import { NewUser, Role } from "../../API/Users/types";
-import { useRefetchUser } from "../hooks";
+import { useRefetchUser } from "../../Users/Hooks";
 
 export default function Register() {
   const navigate = useNavigate();

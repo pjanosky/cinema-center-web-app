@@ -10,13 +10,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useLocation } from "react-router";
 import { useSearchParams, Link } from "react-router-dom";
 import usersClient from "../API/Users/client";
-import { IfAuthenticated, IfUnauthenticated } from "../Account/Components";
-import { useCurrentUser, useRefetchUser } from "../Account/hooks";
+import { IfAuthenticated, IfUnauthenticated } from "../Users/Components";
+import { useCurrentUser, useRefetchUser } from "../Users/Hooks";
 
 export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
-  const refreshUser = useRefetchUser();
+  const refetchUser = useRefetchUser();
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
 
@@ -24,7 +24,14 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
   const currentPage = pathname.split("/")[1].toLowerCase();
-  const redirectablePages = ["profile", "search", "details", "lists", "home"];
+  const redirectablePages = [
+    "profile",
+    "search",
+    "details",
+    "lists",
+    "home",
+    "profile",
+  ];
   const canRedirect = redirectablePages.includes(currentPage);
   const redirect = canRedirect
     ? `redirect=${encodeURIComponent(pathname.slice(1))}&${redirectParams}`
@@ -33,7 +40,7 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
   const logout = async () => {
     onClick && onClick();
     await usersClient.logout();
-    await refreshUser();
+    await refetchUser();
     navigate("/login");
   };
 
@@ -73,7 +80,17 @@ export default function NavigationLinks({ onClick }: { onClick?: () => void }) {
           >
             <Link onClick={onClick} to="/profile">
               <FontAwesomeIcon icon={faUser} />
-              Profile
+              <div
+                className="lh-sm d-flex flex-column justify-content-center"
+                style={{ height: "1rem" }}
+              >
+                <div>Profile</div>
+                {currentUser && (
+                  <div className="small" style={{}}>
+                    {currentUser.name}
+                  </div>
+                )}
+              </div>
             </Link>
           </li>
           <li>

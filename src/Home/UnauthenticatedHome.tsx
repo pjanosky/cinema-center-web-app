@@ -4,7 +4,7 @@ import { List } from "../API/Lists/types";
 import reviewsClient from "../API/Reviews/client";
 import { Review } from "../API/Reviews/types";
 import ListList from "../List/ListList";
-import ReviewsList from "../Movies/ReviewsList";
+import ReviewList from "../Reviews/ReviewList";
 
 export default function UnauthenticatedHome() {
   const [lists, setLists] = useState<List[]>([]);
@@ -45,7 +45,7 @@ export default function UnauthenticatedHome() {
       <div className="mb-4">
         <h2>Recent Reviews</h2>
         <h5 className="mb-3">Recent movie reviews created by watchers</h5>
-        <ReviewsList reviews={reviews} setReviews={setReviews} />
+        <ReviewList reviews={reviews} setReviews={setReviews} />
       </div>
     </div>
   );

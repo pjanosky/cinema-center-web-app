@@ -7,7 +7,7 @@ import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import usersClient from "../API/Users/client";
 import { User } from "../API/Users/types";
-import { IfMatchingUser } from "../Account/Components";
+import { IfMatchingUser } from "../Users/Components";
 import EntryList from "./EntryList";
 import ListEditor from "./ListEditor";
 

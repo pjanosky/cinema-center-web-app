@@ -4,7 +4,7 @@ import { Review } from "../API/Reviews/types";
 import ReviewEditor from "./ReviewEditor";
 import ReviewItem from "./ReviewItem";
 
-export default function ReviewsList({
+export default function ReviewList({
   reviews,
   setReviews,
   showReview,

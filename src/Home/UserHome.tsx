@@ -3,9 +3,9 @@ import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import reviewsClient from "../API/Reviews/client";
 import { Review } from "../API/Reviews/types";
-import { useCurrentUser } from "../Account/hooks";
+import { useCurrentUser } from "../Users/Hooks";
 import ListList from "../List/ListList";
-import ReviewsList from "../Movies/ReviewsList";
+import ReviewList from "../Reviews/ReviewList";
 
 export default function UserHome() {
   const [lists, setLists] = useState<List[]>([]);
@@ -60,15 +60,12 @@ export default function UserHome() {
       <div className="mb-4">
         <h2>Recent Follower Reviews</h2>
         <h5 className="mb-3">Recent movie reviews created by my followers</h5>
-        <ReviewsList
-          reviews={followerReviews}
-          setReviews={setFollowerReviews}
-        />
+        <ReviewList reviews={followerReviews} setReviews={setFollowerReviews} />
       </div>
       <div className="mb-4">
         <h2>My Recent Reviews</h2>
         <h5 className="mb-3">Recent movie reviews created by me</h5>
-        <ReviewsList reviews={myReviews} setReviews={setMyReviews} />
+        <ReviewList reviews={myReviews} setReviews={setMyReviews} />
       </div>
     </div>
   );

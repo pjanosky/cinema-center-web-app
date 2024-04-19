@@ -1,14 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
-import { IfMatchingUser } from "../Account/Components";
-import { useRefetchOnUnauthorized } from "../Account/hooks";
+import { IfMatchingUser } from "../Users/Components";
+import { useRefetchOnUnauthorized } from "../Users/Hooks";
 import ListEditor from "./ListEditor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
-import { User } from "../API/Users/types";
-import usersClient from "../API/Users/client";
 
 export default function ListItem({
   list,
@@ -22,7 +20,6 @@ export default function ListItem({
   editable: boolean;
 }) {
   const [editingList, setEditingList] = useState<List | undefined>();
-  const [user, setUser] = useState<User>();
   const refetchOnUnauthorized = useRefetchOnUnauthorized();
 
   const deleteList = async () => {
@@ -44,18 +41,6 @@ export default function ListItem({
       console.log(error);
     }
   };
-  const fetchUser = useCallback(async () => {
-    try {
-      const user = await usersClient.getUserById(list.userId);
-      setUser(user);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [list.userId]);
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
 
   return editingList ? (
     <div>

@@ -5,12 +5,12 @@ import {
   useAssertCurrentUser,
   useRefetchOnUnauthorized,
   useRefetchUser,
-} from "../../Account/hooks";
+} from "../../Users/Hooks";
 import { useNavigate, useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import usersClient from "../../API/Users/client";
-import { IfEditor } from "../../Account/Components";
+import { IfEditor } from "../../Users/Components";
 
 export default function Account() {
   const currentUser = useAssertCurrentUser();
@@ -180,7 +180,7 @@ export default function Account() {
           <input
             className="form-control"
             disabled={true}
-            value={currentUser?.role === "user" ? "User" : "Editor"}
+            value={currentUser?.role === "user" ? "Watcher" : "Editor"}
           />
         </label>
       </div>

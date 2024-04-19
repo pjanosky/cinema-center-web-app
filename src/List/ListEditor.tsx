@@ -1,6 +1,6 @@
 import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
-import { useRefetchOnUnauthorized } from "../Account/hooks";
+import { useRefetchOnUnauthorized } from "../Users/Hooks";
 
 export default function ListEditor({
   editingList,

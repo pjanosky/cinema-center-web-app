@@ -1,4 +1,4 @@
-import { useCurrentUser } from "./hooks";
+import { useCurrentUser } from "./Hooks";
 
 export function IfAuthenticated({ children }: { children: React.ReactNode }) {
   const user = useCurrentUser();

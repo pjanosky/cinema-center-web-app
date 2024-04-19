@@ -12,6 +12,7 @@ import UserList from "../Users/UserList";
 import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import ListList from "../List/ListList";
+import EmptyStateGraphic from "../EmptyState";
 
 function useIndependentSearchParam(
   name: string
@@ -87,7 +88,7 @@ export default function Search() {
       onChange={(e) => setMode(e.target.value)}
     >
       <option value={"movie"}>Movies</option>
-      <option value={"list"}>Users</option>
+      <option value={"list"}>Lists</option>
       <option value={"user"}>Users</option>
     </select>
   );
@@ -107,6 +108,14 @@ export default function Search() {
     </button>
   );
 
+  const emptyStateGraphic = (
+    <EmptyStateGraphic
+      name="results"
+      icon={faSearch}
+      subtitle="Try a different search"
+    />
+  );
+
   return (
     <div>
       <h1>Search</h1>
@@ -123,29 +132,52 @@ export default function Search() {
         </div>
       </div>
 
-      {mode === "movie" && (
+      {query ? (
         <div>
-          {query && <h2>Results</h2>}
-          <MoviesList movies={results.movies} />
+          {mode === "movie" && (
+            <div>
+              <h2>Results</h2>
+              {results.movies.length > 0 ? (
+                <MoviesList movies={results.movies} />
+              ) : (
+                emptyStateGraphic
+              )}
+            </div>
+          )}
+          {mode === "user" && (
+            <div>
+              <h2>Results ({results.users.length})</h2>
+              {results.users.length > 0 ? (
+                <UserList users={results.users} />
+              ) : (
+                emptyStateGraphic
+              )}
+            </div>
+          )}
+          {mode === "list" && (
+            <div>
+              <h2>Results ({results.lists.length})</h2>
+              {results.lists.length > 0 ? (
+                <ListList
+                  lists={results.lists}
+                  setLists={(setter) =>
+                    setResults({ ...results, lists: setter(results.lists) })
+                  }
+                  editable={false}
+                />
+              ) : (
+                emptyStateGraphic
+              )}
+            </div>
+          )}
         </div>
-      )}
-      {mode === "user" && (
-        <div>
-          {query && <h2>Results ({results.users.length})</h2>}
-          <UserList users={results.users} />
-        </div>
-      )}
-      {mode === "list" && (
-        <div>
-          {query && <h2>Results ({results.lists.length})</h2>}
-          <ListList
-            lists={results.lists}
-            setLists={(setter) =>
-              setResults({ ...results, lists: setter(results.lists) })
-            }
-            editable={false}
-          />
-        </div>
+      ) : (
+        <EmptyStateGraphic
+          name="Search"
+          icon={faSearch}
+          subtitle="Enter a search term to get started"
+          includeNo={false}
+        />
       )}
     </div>
   );

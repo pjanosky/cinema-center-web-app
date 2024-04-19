@@ -3,8 +3,10 @@ import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
 import listsClient from "../../API/Lists/client";
 import { List, NewList } from "../../API/Lists/types";
-import { IfMatchingUser } from "../../Account/Components";
+import { IfMatchingUser } from "../../Users/Components";
 import ListList from "../../List/ListList";
+import EmptyStateGraphic from "../../EmptyState";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 
 export default function Lists() {
   const { id } = useParams();
@@ -90,10 +92,19 @@ export default function Lists() {
           )}
         </div>
       </IfMatchingUser>
-      <div className="mb-4">
-        <h3>Existing Lists</h3>
+      <IfMatchingUser userId={id}>
+        <h3>Existing Lists</h3>{" "}
+      </IfMatchingUser>
+      {lists.length > 0 ? (
         <ListList lists={lists} setLists={setLists} />
-      </div>
+      ) : (
+        <EmptyStateGraphic
+          name="lists"
+          icon={faList}
+          subtitle="Add a list above"
+          userId={id}
+        />
+      )}
     </div>
   );
 }

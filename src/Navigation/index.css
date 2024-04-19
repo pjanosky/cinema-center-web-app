@@ -24,7 +24,7 @@
 }
 
 .cc-navigation .active {
-  background-color: lightgrey;
+  background-color: var(--secondary-2);
   border-radius: 4px;
 }
 

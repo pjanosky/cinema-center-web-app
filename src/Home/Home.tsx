@@ -1,4 +1,4 @@
-import { IfUnauthenticated, IfUser, IfEditor } from "../Account/Components";
+import { IfUnauthenticated, IfUser, IfEditor } from "../Users/Components";
 import EditorHome from "./EditorHome";
 import UnauthenticatedHome from "./UnauthenticatedHome";
 import UserHome from "./UserHome";

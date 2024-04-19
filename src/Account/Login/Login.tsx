@@ -5,12 +5,12 @@ import { InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import usersClient from "../../API/Users/client";
-import { useRefetchUser } from "../hooks";
+import { useRefetchUser } from "../../Users/Hooks";
 
 export default function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const refreshUser = useRefetchUser();
+  const refetchUser = useRefetchUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +26,7 @@ export default function Login() {
     setError(undefined);
     try {
       await usersClient.login(username, password);
-      await refreshUser();
+      await refetchUser();
       if (redirect) {
         navigate(`/${redirect}?${redirectParams}`, { replace: true });
       } else {

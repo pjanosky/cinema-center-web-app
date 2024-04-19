@@ -1,9 +1,9 @@
 import { useParams } from "react-router";
 import { useCallback, useEffect, useState } from "react";
-import ReviewsList from "./ReviewsList";
-import { useRefetchOnUnauthorized, useCurrentUser } from "../Account/hooks";
+import ReviewList from "../Reviews/ReviewList";
+import { useRefetchOnUnauthorized, useCurrentUser } from "../Users/Hooks";
 import { isAxiosError } from "axios";
-import { IfEditor, IfNotEditor, IfUser } from "../Account/Components";
+import { IfEditor, IfNotEditor, IfUser } from "../Users/Components";
 import ListList from "../List/ListList";
 import moviesClient from "../API/Movies/client";
 import reviewsClient from "../API/Reviews/client";
@@ -11,7 +11,7 @@ import listsClient from "../API/Lists/client";
 import { List } from "../API/Lists/types";
 import { Movie } from "../API/Movies/types";
 import { Review } from "../API/Reviews/types";
-import ReviewEditor from "./ReviewEditor";
+import ReviewEditor from "../Reviews/ReviewEditor";
 import MoviePoster from "./MoviePoster";
 import MoviesList from "./MoviesList";
 import MovieDetailsHeader from "./MovieDetailsHeader";
@@ -310,7 +310,7 @@ export default function MovieDetails() {
       {reviews.length > 0 && (
         <div className="mb-4">
           <h2>Reviews</h2>
-          <ReviewsList
+          <ReviewList
             reviews={reviews}
             setReviews={setReviews}
             showReview={(review: Review) =>

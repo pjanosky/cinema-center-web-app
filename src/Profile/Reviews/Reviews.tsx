@@ -2,8 +2,10 @@ import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
 import reviewsClient from "../../API/Reviews/client";
 import { Review } from "../../API/Reviews/types";
-import { useRefetchOnUnauthorized } from "../../Account/hooks";
-import ReviewsList from "../../Movies/ReviewsList";
+import { useRefetchOnUnauthorized } from "../../Users/Hooks";
+import ReviewList from "../../Reviews/ReviewList";
+import EmptyStateGraphic from "../../EmptyState";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
 export default function Reviews() {
   const { id } = useParams();
@@ -30,7 +32,16 @@ export default function Reviews() {
   return (
     <div>
       <h2>Reviews ({reviews.length})</h2>
-      <ReviewsList reviews={reviews} setReviews={setReviews} />
+      {reviews.length > 0 ? (
+        <ReviewList reviews={reviews} setReviews={setReviews} />
+      ) : (
+        <EmptyStateGraphic
+          name="reviews"
+          icon={faMessage}
+          subtitle="Search for a movie to add a review"
+          userId={id}
+        />
+      )}
     </div>
   );
 }

@@ -7,10 +7,10 @@ import reviewsClient from "../API/Reviews/client";
 import { Review } from "../API/Reviews/types";
 import usersClient from "../API/Users/client";
 import { User } from "../API/Users/types";
-import { IfUser, IfMatchingUser } from "../Account/Components";
-import { useCurrentUser } from "../Account/hooks";
-import LikesModalButton from "./LikesModalButton";
-import RatingStars from "./RatingStars";
+import { IfUser, IfMatchingUser } from "../Users/Components";
+import { useCurrentUser } from "../Users/Hooks";
+import LikesModalButton from "../Movies/LikesModalButton";
+import RatingStars from "../Movies/RatingStars";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 
