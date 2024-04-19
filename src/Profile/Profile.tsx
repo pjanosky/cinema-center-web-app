@@ -75,7 +75,7 @@ export default function Profile() {
       </h5>
       {user && isEditorUser(user) && user.bio && (
         <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
-          Bio: {user.bio}
+          {user.bio}
         </div>
       )}
 
