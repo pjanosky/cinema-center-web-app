@@ -69,7 +69,7 @@ export default function EntryItem({
   }, [fetchMovieDetails]);
 
   return (
-    <div className="d-flex gap-3 my-2">
+    <div className="d-flex gap-3 my-2f flex-wrap">
       <div
         style={{ width: "92px", height: "138px" }}
         className="flex-shrink-0 flex-grow-0"
@@ -89,7 +89,10 @@ export default function EntryItem({
           </MoviePoster>
         )}
       </div>
-      <div className="flex-shrink-1 flex-grow-1 d-flex flex-column justify-content-between flex-wrap">
+      <div
+        className="flex-shrink-1 flex-grow-1 d-flex flex-column justify-content-between flex-wrap"
+        style={{ flexBasis: "200px" }}
+      >
         <div>
           <div className="fw-bold cc-link">
             {currentUser && currentUser._id === list.userId ? (
@@ -122,9 +125,7 @@ export default function EntryItem({
               ></textarea>
             </div>
           ) : (
-            <div style={{ whiteSpace: "pre-wrap", minWidth: "200px" }}>
-              {entry.description}
-            </div>
+            <div style={{ whiteSpace: "pre-wrap" }}>{entry.description}</div>
           )}
         </div>
         <IfMatchingUser userId={list.userId}>

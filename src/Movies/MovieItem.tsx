@@ -27,7 +27,7 @@ export default function MovieItem({
         </div>
         <div
           className="flex-grow-1 flex-shrink-1"
-          style={{ flexBasis: "150px", maxWidth: "1000px" }}
+          style={{ flexBasis: "200px" }}
         >
           <div className="fw-bold">{movie?.title && movie.title}</div>
           <div className="cc-secondary-1">

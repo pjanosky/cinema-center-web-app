@@ -26,10 +26,12 @@ export default function EntryList({
                   <div className="flex-grow-1 flex-shrink-1">
                     <EntryItem entry={entry} list={list} setList={setList} />
                   </div>
-                  <FontAwesomeIcon
-                    className="flex-grow-0 flex-shrink-0"
-                    icon={faChevronRight}
-                  />
+                  <div className="flex-grow-0 flex-shrink-0">
+                    <FontAwesomeIcon
+                      // className="flex-grow-0 flex-shrink-0"
+                      icon={faChevronRight}
+                    />
+                  </div>
                 </div>
               </Link>
             )}
